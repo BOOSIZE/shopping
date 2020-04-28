@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/log.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+<div  id="div">
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" id="account" required  lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码:</label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" id="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" id="log" style="margin-left: 21%;">登录</button>
+            <a  href="/go/to/reg">注册账号</a>
+        </div>
+    </div>
+</div>
+<script>
+	layui.use(['layer', 'jquery'], function ()
+	{
+		var layer = layui.layer;
+		var $ = layui.jquery;
+		$("#log").click(function ()
+		{
+			var account=document.getElementById("account").value;
+			var password=document.getElementById("password").value;
+			if(account.length===0 || password.length===0)
+			{
+				layer.alert('请填写完整内容', {icon: 5});
+			}
+			else
+			{
+				$.ajax({
+					type:"POST",
+					url:"/user/log",
+				    dataType:"text",
+                    data:{account:account,password:password},
+                    success:function(msg)
+                    {
+                        if(msg==="yes")
+                        {
+                            layer.open({
+                                title: ['温馨提示'],
+                                content: '登录成功',
+                                btn: ['确定'],
+                                closeBtn :0,
+	                            icon:'1',
+                                yes: function(){
+                                    window.location.href="/go/to/main";
+                                }
+                            });
+                        }
+                        else if(msg==="no")
+                        {
+                            layer.alert('密码错误', {icon: 5});
+                        }
+                        else if(msg==="disable")
+                        {
+	                        layer.alert('您已被禁用', {icon: 5});
+                        }
+                        else
+                        {
+                            layer.alert('该用户不存在', {icon: 5});
+                        }
+                    },
+                    error:function ()
+                    {
+                        layer.alert('服务器正忙', {icon: 5});
+                    }
+                });
+			}
+		});
+
+	});
+</script>
+
+</body>
+</html>
