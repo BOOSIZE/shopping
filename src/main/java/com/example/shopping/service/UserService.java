@@ -12,7 +12,7 @@ public interface UserService
 
 	public abstract String checkAccount(String account);
 
-	public abstract String getList(Integer page, Integer limit, String uname);
+	public abstract String getList(Integer page, Integer limit, String uname,String urole);
 
 	public abstract String updateUserType(String utype, String uaccount);
 }

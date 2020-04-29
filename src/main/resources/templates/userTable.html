@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+
+<div class="demoTable">
+    用户名:<input type="text" id="uname" >
+    <button class="layui-btn" data-type="reload" id="cx">查询</button>
+</div>
+<table id="demo" lay-filter="test"></table>
+
+<script type="text/html" id="bar">
+    {{#  if(d.utype==='禁用'){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="yes">启用</a>
+    {{# } else { }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no">禁用</a>
+    {{#  } }}
+</script>
+<script>
+
+	layui.use('table', function() {
+		var table = layui.table;
+		table.render({
+			elem: '#demo'
+            ,url:"/user/getList"
+            ,page:true
+            ,limit:10
+            ,limits:[10]
+			,id:"testReload"
+			,cols: [
+				[
+					{field: 'uaccount', title: '账号(手机号)', width:'20%'}
+					,{field: 'uname', title: '用户名', width:'10%'}
+					,{field: 'usex', title: '性别', width:'10%'}
+					,{field: 'uaddress', title: '地址', width:'10%'}
+					,{field: 'umoney', title: '余额', width:'10%'}
+					,{field: 'uregtime', title: '注册时间', width:'20%'}
+					,{field: 'utype', title: '状态', width:'10%'}
+					,{title:'操作',width:'10%',toolbar:"#bar"}
+				]
+			]
+		});
+
+		$('#cx').click(function () {
+			table.reload('testReload',
+				{
+					page:
+						{
+							curr: 1 //重新从第 1 页开始
+						}
+					, where:
+						{
+							uname: $("#uname").val()
+
+						}
+				});
+		});
+
+		table.on('tool(test)', function(obj){
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event;
+			var tr = obj.tr;
+
+
+			if(layEvent === 'yes')
+			{
+				layer.confirm('确定要启用'+data.uname+"用户吗？", function(index)
+				{
+					$.ajax({
+						type:"POST",
+                        url:"/user/updateUserType",
+					    data:{utype:'启用',uaccount:data.uaccount},
+					    success:function(msg)
+					    {
+						    if(msg==="yes")
+						    {
+							    layer.alert("修改成功", {icon: 1});
+							    $(".layui-laypage-btn")[0].click();
+							    layer.close(index);
+						    }
+						    else
+                            {
+	                            layer.alert("修改失败，请稍后重试", {icon: 5});
+                            }
+                        },
+                        error:function ()
+                        {
+                            layer.alert("服务器正忙.....", {icon: 5});
+                        }
+                     });
+                });
+			}
+			else
+			{
+				layer.confirm('确定要禁用'+data.uname+"用户吗？", function(index)
+				{
+					$.ajax({
+						type:"POST",
+						url:"/user/updateUserType",
+						data:{utype:'禁用',uaccount:data.uaccount},
+						success:function(msg)
+						{
+							if(msg==="yes")
+							{
+								layer.alert("修改成功", {icon: 1});
+								$(".layui-laypage-btn")[0].click();
+								layer.close(index);
+							}
+							else
+							{
+								layer.alert("修改失败，请稍后重试", {icon: 5});
+							}
+						},
+						error:function ()
+						{
+							layer.alert("服务器正忙.....", {icon: 5});
+						}
+					});
+				});
+			}
+		});
+	});
+</script>
+</body>
+</html>

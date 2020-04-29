@@ -35,13 +35,17 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override
-	public String getList(Integer page, Integer limit, String uname)
+	public String getList(Integer page, Integer limit, String uname,String urole)
 	{
+		if(urole!=null && urole.equals("全部"))
+		{
+			urole=null;
+		}
 		TableModel tableModel=new TableModel();
 		tableModel.setCode(0);
 		tableModel.setMsg("");
-		tableModel.setCount(userDao.getSum(uname));
-		tableModel.setData(userDao.getList(limit,limit*(page-1),uname));
+		tableModel.setCount(userDao.getSum(uname,urole));
+		tableModel.setData(userDao.getList(limit,limit*(page-1),uname,urole));
 		Gson gson=new Gson();
 		return gson.toJson(tableModel);
 	}
