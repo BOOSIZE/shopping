@@ -9,6 +9,7 @@ body
     height: 500px;
     width: 100%;
     background-image: url("../image/beijing.jpg");
+    background-size: 100%;
 }
 
 #div

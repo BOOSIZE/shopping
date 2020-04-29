@@ -4,7 +4,7 @@ package com.example.shopping.entity;
 public class Menuinfo
 {
 
-  private long mid;
+  private Long mid;
   private String mname;
   private String mnum;
   private String fnum;
@@ -12,11 +12,11 @@ public class Menuinfo
   private String mrole;
 
 
-  public long getMid() {
+  public Long getMid() {
     return mid;
   }
 
-  public void setMid(long mid) {
+  public void setMid(Long mid) {
     this.mid = mid;
   }
 
