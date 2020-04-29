@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+
+<form class="layui-form" action="" lay-filter="frm">
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-inline">
+            <input type="text" id="jtitle" name="jtitle" autocomplete="off" class="layui-input"
+                   placeholder="请输入文章标题">
+        </div>
+
+        <label class="layui-form-label">文章作者</label>
+        <div class="layui-input-inline">
+            <input type="text" id="jauthor" name="jauthor" autocomplete="off" class="layui-input"
+                   placeholder="请输入文章作者">
+        </div>
+
+        <label class="layui-form-label">文章状态</label>
+        <div class="layui-input-inline">
+            <select name="jstatue" id="jstatue" lay-filter="jstatue">
+                <option value="" selected=""></option>
+                <option value="1">启用</option>
+                <option value="2">禁用</option>
+                <option value="3">已删除</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">文章类型</label>
+            <div class="layui-input-inline">
+                <select name="jtype" id="jtype" lay-filter="jtype">
+                    <option value="" selected=""></option>
+                    <option value="1">新闻资讯</option>
+                    <option value="2">考试攻略</option>
+                </select>
+            </div>
+
+            <label class="layui-form-label">操作时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="jtime" class="layui-input" id="test6" placeholder="请选择时间">
+            </div>
+
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="addnews">新增</button>
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
+        </div>
+    </div>
+</form>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+</body>
+</html>
