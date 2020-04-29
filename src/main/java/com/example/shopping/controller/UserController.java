@@ -33,12 +33,6 @@ public class UserController
 		return userServiceImpl.reg(userinfo);
 	}
 
-	@RequestMapping("updateUserType")
-	@ResponseBody
-	public String updateUserType(String utype,String uaccount)
-	{
-		return userServiceImpl.updateUserType(utype,uaccount);
-	}
 
 	@RequestMapping("getList")
 	@ResponseBody

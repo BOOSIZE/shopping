@@ -3,7 +3,7 @@ package com.example.shopping.entity;
 public class Userinfo
 {
 
-	private long uid;
+	private Long uid;
 	private String uaccount;
 	private String upassword;
 	private String uname;
@@ -86,11 +86,11 @@ public class Userinfo
 		this.urole = urole;
 	}
 
-	public long getUid() {
+	public Long getUid() {
 		return uid;
 	}
 
-	public void setUid(long uid) {
+	public void setUid(Long uid) {
 		this.uid = uid;
 	}
 
