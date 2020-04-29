@@ -11,14 +11,22 @@
 
 <div class="demoTable">
     用户名:<input type="text" id="uname" >
+    角色:<select id="urole">
+    <option value="全部">全部</option>
+    <option value="1">管理员</option>
+    <option value="2">用户</option>
+
+</select>
     <button class="layui-btn" data-type="reload" id="cx">查询</button>
+    <button class="layui-btn"  id="add">新增管理员</button>
 </div>
 <table id="demo" lay-filter="test"></table>
 
 <script type="text/html" id="bar">
-    {{#  if(d.utype==='禁用'){ }}
+    {{#  if(d.utype==='禁用' && d.urole==='2'){ }}
     <a class="layui-btn layui-btn-xs" lay-event="yes">启用</a>
-    {{# } else { }}
+    {{#  } }}
+    {{#  if(d.utype==='启用' && d.urole==='2'){ }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no">禁用</a>
     {{#  } }}
 </script>
@@ -35,9 +43,10 @@
 			,id:"testReload"
 			,cols: [
 				[
-					{field: 'uaccount', title: '账号(手机号)', width:'20%'}
+					{field: 'uaccount', title: '账号(手机号)', width:'15%'}
 					,{field: 'uname', title: '用户名', width:'10%'}
-					,{field: 'usex', title: '性别', width:'10%'}
+					,{field: 'urole', title: '角色', width:'10%', templet:function (d){return d.urole==="1"?"管理员":"用户"}}
+					,{field: 'usex', title: '性别', width:'5%'}
 					,{field: 'uaddress', title: '地址', width:'10%'}
 					,{field: 'umoney', title: '余额', width:'10%'}
 					,{field: 'uregtime', title: '注册时间', width:'20%'}
@@ -56,7 +65,8 @@
 						}
 					, where:
 						{
-							uname: $("#uname").val()
+							uname: $("#uname").val(),
+                            urole:$('#urole').val()
 
 						}
 				});

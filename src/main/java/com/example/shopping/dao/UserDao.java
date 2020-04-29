@@ -23,7 +23,7 @@ public interface UserDao
 	@Select("<script> SELECT * FROM USERINFO WHERE 1=1 " +
 			"<when test='uname!=null'> AND UNAME LIKE CONCAT('%',#{uname},'%')</when>" +
 			"<when test='urole!=null'> AND UROLE =#{urole}</when>"+
-			"ORDER BY UREGTIME LIMIT #{limit} OFFSET #{end}  </script>")
+			"ORDER BY UROLE LIMIT #{limit} OFFSET #{end}  </script>")
 	public abstract List<Userinfo> getList(Integer limit, Integer end, String uname,String urole);
 
 	@Select("<script> SELECT COUNT(*) FROM USERINFO WHERE 1=1" +
