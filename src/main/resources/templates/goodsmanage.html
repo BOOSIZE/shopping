@@ -36,8 +36,6 @@
 
 <script type="text/javascript" th:inline="none">
 
-	var reg=/^[0-9]+.?[0-9]*$/;
-
 	layui.use(['table', 'jquery'], function () {
 		var table = layui.table;
 		var $ = layui.jquery;
@@ -95,7 +93,7 @@
 				layer.prompt({title:'请输入商品单价'},function(value, index, elem)
 				{
 					var money = parseInt(value);
-					if(reg.test(money)){
+					if(value % 1 === 0){
 						if(money>100 || money <1){
 							layer.msg("请输入1-100整数");
 						}else {

@@ -82,6 +82,11 @@ public class GoodsServiceImpl implements GoodsService
 		return new Gson().toJson(tableModel);
 	}
 
+	/**
+	 * @Description: 新增商品
+	 * @Param [sname, smoney, scount, sendtime]
+	 * @return java.lang.String
+	 **/
 	@Override
 	public String insertGoods(String sname, String smoney, String scount,String sendtime)
 	{

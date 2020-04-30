@@ -28,14 +28,12 @@
 
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">购买商品</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">加入购物车</a>
+    <a class="layui-btn layui-btn-xs" lay-event="buy">购买商品</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="add">加入购物车</a>
 </script>
 
 
 <script type="text/javascript" th:inline="none">
-
-	var reg=/^[0-9]+.?[0-9]*$/;
 
 	layui.use(['table', 'jquery'], function () {
 		var table = layui.table;
@@ -77,7 +75,7 @@
 						, success: function (msg) {
 							if (msg === 1) {
 								layer.msg("删除成功！");
-								window.location.href="/go/to/goodsmanage";
+								window.location.href="/go/to/goodscutomer";
 							} else {
 								layer.msg("删除失败！")
 							}
@@ -88,43 +86,22 @@
 					});
 					layer.close(index);
 				});
-			} else if (obj.event === 'edit') {
+			} else if (obj.event === 'buy') {
 
-				layer.prompt({title:'请输入商品单价'},function(value, index, elem)
-				{
-					var money = parseInt(value);
-					if(reg.test(money)){
-						if(money>100 || money <1){
-							layer.msg("请输入1-100整数");
-						}else {
-							$.ajax({
-								type: "post"
-								, url: '/goods/updatePrice'
-								//预期服务器返回的数据类型;
-								, datatype: "text"
-								//从该js会发出到服务器的数据
-								, data: {"sid": id,"smoney":value}
-								//从servlet接收的数据
-								, success: function (msg) {
-									if (msg === 1) {
-										layer.msg("修改成功！");
-										obj.update({
-											smoney: value
-										})
-									} else {
-										layer.msg("修改失败！")
-									}
-								}
-								, error: function () {
-									alert("服务器正忙.....");
-								}
-							});
-							layer.close(index);
-						}
-                    }else {
-						layer.msg("请输入1-100整数");
+				layer.open({
+					type: 2,
+					area: ['45%', '90%'],
+					title: false,
+					offset: '20px',
+					shadeClose: true,
+					scrollbar: true,
+					content: ['buygoods.html'],
+					success: function (layero, index) {
+						var iframe = window['layui-layer-iframe' + index];
+						iframe.selectinfo(data);
 					}
-                });
+				});
+				return false;
 			}
 		});
 	});
