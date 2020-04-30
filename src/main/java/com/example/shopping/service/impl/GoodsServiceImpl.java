@@ -38,6 +38,12 @@ public class GoodsServiceImpl implements GoodsService
 	}
 
 	@Override
+	public String insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime)
+	{
+		return new Gson().toJson(goodsMapper.insertGoods(sname,smoney,scount,sstarttime,sendtime));
+	}
+
+	@Override
 	public List<Shopinfo> queryAllNews(String type)
 	{
 		return null;
@@ -73,9 +79,5 @@ public class GoodsServiceImpl implements GoodsService
 		return 0;
 	}
 
-	@Override
-	public int insertNewsContent(Map<String, String> map)
-	{
-		return 0;
-	}
+
 }

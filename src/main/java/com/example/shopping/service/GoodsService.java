@@ -16,6 +16,12 @@ public interface GoodsService
 	 **/
 	String getList(String sname,Integer page,Integer limit);
 
+	/**
+	 * 新增商品信息
+	 * @param
+	 * @return
+	 */
+	public String insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime);
 
 	/**
 	 * 前端展示4条新闻资讯
@@ -59,10 +65,5 @@ public interface GoodsService
 	 */
 	public int updateNewsContent(Map<String, String> map);
 
-	/**
-	 * 新增资讯文章
-	 * @param map
-	 * @return
-	 */
-	public int insertNewsContent(Map<String, String> map);
+
 }

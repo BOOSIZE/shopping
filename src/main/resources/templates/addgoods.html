@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增商品</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+
+<div id="div">
+    <br>
+    <br>
+    <form class="layui-form" action="" id="regForm">
+
+        <div class="layui-form-item">
+        <label class="layui-form-label">商品名</label>
+        <div class="layui-input-inline">
+            <input type="text" id="sname" name="sname" autocomplete="off" class="layui-input"
+                   placeholder="请输入商品名称">
+        </div>
+        </div>
+
+        <div class="layui-form-item">
+        <label class="layui-form-label">商品单价</label>
+        <div class="layui-input-inline">
+            <input type="text" id="smoney" name="smoney" autocomplete="off" class="layui-input"
+                   placeholder="请输入商品单价">
+        </div>
+        </div>
+
+
+        <div class="layui-form-item">
+        <label class="layui-form-label">商品数量</label>
+        <div class="layui-input-inline">
+            <input type="text" id="scount" name="scount" autocomplete="off" class="layui-input"
+                   placeholder="请输入商品数量">
+        </div>
+        </div>
+
+        <div class="layui-form-item">
+        <label class="layui-form-label">进货时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test22" name="sstarttime" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+        <label class="layui-form-label">保质期到期时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test23" name="sendtime" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="padding-left: 110px">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo2">确认新增</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
+		var form = layui.form,
+			layer = layui.layer,
+			$ = layui.jquery,
+			laydate = layui.laydate;
+
+		//获取当前时间
+		var date = new Date();
+		var y = date.getFullYear();
+		var m = date.getMonth()+1;
+		var d = date.getDate();
+		var now = ""+y+"-"+m+"-"+d;
+
+		//进货时间
+		laydate.render({
+			elem: '#test22'
+			,showBottom: false
+			,min: now
+		});
+
+		//保质期到期时间
+		laydate.render({
+			elem: '#test23'
+			,showBottom: false
+			,min: now
+		});
+
+
+		//绑定的按钮是submit 监听提交 lay-filter="search"
+		form.on('submit(demo2)', function (data) {
+			var formData = data.field;
+			var sname = formData.sname;
+			var smoney = formData.smoney;
+			var scount = formData.scount;
+			var sstarttime = formData.sstarttime;
+			var sendtime = formData.sendtime;
+
+			console.log(formData);
+
+			$.ajax({
+				type: "post"
+				,
+				url: '/goods/insertGoods'
+				//预期服务器返回的数据类型;
+				,
+				datatype: "text"
+				//从该js会发出到服务器的数据
+				,
+				data: {
+					"sname": sname,
+					"smoney": smoney,
+					"scount": scount,
+					"sstarttime": sstarttime,
+					"sendtime": sendtime
+				}
+				//从servlet接收的数据
+				,
+				success: function (msg) {
+					if (msg === "1") {
+						layer.msg("新增成功！");
+						parent.location.reload();
+					} else {
+						layer.msg("新增失败！")
+					}
+				}
+				,
+				error: function () {
+					alert("服务器正忙.....");
+				}
+			});
+			return false;//false：阻止表单跳转  true：表单跳转
+		});
+
+	});
+</script>
+</body>
+</html>

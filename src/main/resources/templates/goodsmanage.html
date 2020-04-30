@@ -6,7 +6,6 @@
     <title>商品管理</title>
     <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <script th:src="@{/js/layui/layui.js}"></script>
-<!--    <script th:src="@{/js/goods/goodstable.js}"></script>-->
     <script th:src="@{/js/jquery-3.4.1.js}"></script>
 </head>
 <body>
@@ -21,7 +20,7 @@
                    placeholder="请输入商品名称">
         </div>
         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-        <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="addnews">新增</button>
+        <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="addgoods">新增</button>
         <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
     </div>
 </form>
@@ -203,6 +202,19 @@
 				, method: 'post'
 			});
 			return false;//false：阻止表单跳转  true：表单跳转
+		});
+
+		form.on('submit(addgoods)', function (data) {
+			layer.open({
+				type: 2,
+				area: ['45%', '90%'],
+				title: false,
+				offset: '20px',
+				shadeClose: true,
+				scrollbar: true,
+				content: ['addgoods.html']
+			});
+			return false;
 		});
 	});
 

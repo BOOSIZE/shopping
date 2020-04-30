@@ -55,9 +55,9 @@ public interface GoodsMapper
 	public int updateNewsContent(Map<String, String> map);
 
 	/**
-	 * 新增文章
-	 * @param map
+	 * 新增商品
+	 * @param
 	 * @return
 	 */
-	public int insertNewsContent(Map<String, String> map);
+	public int insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime);
 }
