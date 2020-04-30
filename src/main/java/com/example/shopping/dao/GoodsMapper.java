@@ -48,16 +48,24 @@ public interface GoodsMapper
 	public int updateNewsStatue(Map<String, String> map);
 
 	/**
-	 * 更新文章内容
-	 * @param map
-	 * @return
-	 */
-	public int updateNewsContent(Map<String, String> map);
-
-	/**
 	 * 新增商品
 	 * @param
 	 * @return
 	 */
-	public int insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime);
+	int insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime);
+
+	/**
+	 * @Description: 删除商品
+	 * @Param [id]
+	 * @return int
+	 **/
+	int deleteGoods(String sid);
+
+
+	/**
+	 * @Description: 更新价格
+	 * @Param [sid, price]
+	 * @return int
+	 **/
+	int updatePrice(String sid,String smoney);
 }

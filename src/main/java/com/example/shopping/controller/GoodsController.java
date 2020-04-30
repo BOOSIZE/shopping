@@ -50,4 +50,27 @@ public class GoodsController
 		return goodsServiceImpl.insertGoods(sname,smoney,scount,sstarttime,sendtime);
 	}
 
+	/**
+	 * @Description: 下架商品
+	 * @Param [sid]
+	 * @return java.lang.String
+	 **/
+	@RequestMapping("deleteGoods")
+	@ResponseBody
+	public int updateGoodsStatue(String sid){
+		return goodsServiceImpl.deleteGoods(sid);
+	}
+
+
+	/**
+	 * @Description: 更新价格
+	 * @Param [sid, price]
+	 * @return int
+	 **/
+	@RequestMapping("updatePrice")
+	@ResponseBody
+	public int updatePrice(String sid, String smoney){
+		System.out.println(sid+" "+smoney);
+		return goodsServiceImpl.updatePrice(sid,smoney);
+	}
 }

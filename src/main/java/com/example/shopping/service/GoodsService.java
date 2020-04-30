@@ -51,12 +51,20 @@ public interface GoodsService
 	 */
 	public TableModel queryNewsWithParam(Map<String, String> map);
 
+
 	/**
-	 * 修改文章状态
-	 * @param map
-	 * @return
-	 */
-	public int updateNewsStatue(Map<String, String> map);
+	 * @Description: 删除商品
+	 * @Param [id]
+	 * @return int
+	 **/
+	int deleteGoods(String id);
+
+	/**
+	 * @Description: 更新价格
+	 * @Param [sid, price]
+	 * @return int
+	 **/
+	int updatePrice(String sid,String smoney);
 
 	/**
 	 * 更新文章内容
@@ -64,6 +72,5 @@ public interface GoodsService
 	 * @return
 	 */
 	public int updateNewsContent(Map<String, String> map);
-
 
 }

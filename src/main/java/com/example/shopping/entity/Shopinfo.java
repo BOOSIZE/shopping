@@ -9,68 +9,86 @@ public class Shopinfo {
   private String sstarttime;
   private String sendtime;
   private String ssole;
+  private String tips;
 
 
-  public Long getSid() {
+  public Long getSid()
+  {
     return sid;
   }
 
-  public void setSid(Long sid) {
+  public void setSid(Long sid)
+  {
     this.sid = sid;
   }
 
-
-  public String getSname() {
+  public String getSname()
+  {
     return sname;
   }
 
-  public void setSname(String sname) {
+  public void setSname(String sname)
+  {
     this.sname = sname;
   }
 
-
-  public String getSmoney() {
+  public String getSmoney()
+  {
     return smoney;
   }
 
-  public void setSmoney(String smoney) {
+  public void setSmoney(String smoney)
+  {
     this.smoney = smoney;
   }
 
-
-  public String getScount() {
+  public String getScount()
+  {
     return scount;
   }
 
-  public void setScount(String scount) {
+  public void setScount(String scount)
+  {
     this.scount = scount;
   }
 
-
-  public String getSstarttime() {
+  public String getSstarttime()
+  {
     return sstarttime;
   }
 
-  public void setSstarttime(String sstarttime) {
+  public void setSstarttime(String sstarttime)
+  {
     this.sstarttime = sstarttime;
   }
 
-
-  public String getSendtime() {
+  public String getSendtime()
+  {
     return sendtime;
   }
 
-  public void setSendtime(String sendtime) {
+  public void setSendtime(String sendtime)
+  {
     this.sendtime = sendtime;
   }
 
-
-  public String getSsole() {
+  public String getSsole()
+  {
     return ssole;
   }
 
-  public void setSsole(String ssole) {
+  public void setSsole(String ssole)
+  {
     this.ssole = ssole;
   }
 
+  public String getTips()
+  {
+    return tips;
+  }
+
+  public void setTips(String tips)
+  {
+    this.tips = tips;
+  }
 }

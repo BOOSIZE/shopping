@@ -23,7 +23,7 @@
                 and sname like CONCAT('%','${sname}','%')
             </if>
         </where>
-        order by SENDTIME desc limit ${statrNum},${limit}
+        order by SENDTIME limit ${statrNum},${limit}
     </select>
 
     <select id="querySingleNews" resultType="com.example.shopping.entity.Shopinfo">
@@ -34,9 +34,12 @@
         update journalism set jstatue=#{statue} where jid=#{jid}
     </update>
 
-    <update id="updateNewsContent">
-        update journalism set jtitle=#{jtitle},jabstract=#{jabstract},jtext=#{jtext},jauthor=#{jauthor},
-        jtime=#{jtime},jyear=#{jyear},jmonth=#{jmonth},jday=#{jday},jliulan=#{jliulan} where jid=#{jid}
+    <update id="updatePrice">
+        update shopinfo set SMONEY=#{smoney} where SID=#{sid}
     </update>
+
+    <delete id="deleteGoods" >
+        delete from shopinfo where SID = #{sid}
+    </delete>
 </mapper>
 	

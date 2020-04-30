@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +32,34 @@ public class GoodsServiceImpl implements GoodsService
 
 		//设置起始和限制条数
 		int statrdNum = ((page - 1) * limit);
+		List<Shopinfo> shopinfos = goodsMapper.queryNewsWithParam(sname, statrdNum, limit);
+
+
+		SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-dd");
+		String now=sdf.format(new Date());
+		Calendar calendar=Calendar.getInstance();
+		calendar.add(Calendar.DATE,7);
+		String error=sdf.format(calendar.getTime());
+		for (Shopinfo shopinfo : shopinfos)
+		{
+			shopinfo.setTips("未过期");
+			if(shopinfo.getSendtime().compareTo(now)<=0)
+			{
+				shopinfo.setTips("已过期");
+			}
+			else
+			{
+				if(shopinfo.getSendtime().compareTo(error)<=0)
+				{
+					shopinfo.setTips("即将过期");
+				}
+			}
+		}
 
 		//设置回传的表格参数
 		TableModel tableModel=new TableModel();
 		tableModel.setCount(goodsMapper.queryNewsWithParamTotalNum(sname));
-		tableModel.setData(goodsMapper.queryNewsWithParam(sname,statrdNum,limit));
+		tableModel.setData(shopinfos);
 		return new Gson().toJson(tableModel);
 	}
 
@@ -42,6 +68,20 @@ public class GoodsServiceImpl implements GoodsService
 	{
 		return new Gson().toJson(goodsMapper.insertGoods(sname,smoney,scount,sstarttime,sendtime));
 	}
+
+
+	@Override
+	public int deleteGoods(String sid)
+	{
+		return goodsMapper.deleteGoods(sid);
+	}
+
+	@Override
+	public int updatePrice(String sid, String smoney)
+	{
+		return goodsMapper.updatePrice(sid,smoney);
+	}
+
 
 	@Override
 	public List<Shopinfo> queryAllNews(String type)
@@ -65,12 +105,6 @@ public class GoodsServiceImpl implements GoodsService
 	public TableModel queryNewsWithParam(Map<String, String> map)
 	{
 		return null;
-	}
-
-	@Override
-	public int updateNewsStatue(Map<String, String> map)
-	{
-		return 0;
 	}
 
 	@Override
