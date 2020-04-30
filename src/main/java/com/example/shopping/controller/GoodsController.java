@@ -1,5 +1,6 @@
 package com.example.shopping.controller;
 
+import com.example.shopping.entity.Userinfo;
 import com.example.shopping.service.GoodsService;
 import com.example.shopping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,18 @@ public class GoodsController
 	 **/
 	@RequestMapping("getList")
 	@ResponseBody
-	public String getList(String sname,Integer page,Integer limit)
+	public String getList(String sname,Integer page,Integer limit,HttpServletRequest request)
 	{
-		return goodsServiceImpl.getList(sname,page,limit);
+		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
+		String list = "";
+
+		//判断角色
+		if(user.getUrole().equals("1")){
+			list = goodsServiceImpl.getList(sname, page, limit);
+		}else if(user.getUrole().equals("2")){
+			list = goodsServiceImpl.getBuyList(sname,page,limit);
+		}
+		return list;
 	}
 
 
@@ -46,8 +56,8 @@ public class GoodsController
 	 **/
 	@RequestMapping("insertGoods")
 	@ResponseBody
-	public String insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime){
-		return goodsServiceImpl.insertGoods(sname,smoney,scount,sstarttime,sendtime);
+	public String insertGoods(String sname,String smoney,String scount,String sendtime){
+		return goodsServiceImpl.insertGoods(sname,smoney,scount,sendtime);
 	}
 
 	/**

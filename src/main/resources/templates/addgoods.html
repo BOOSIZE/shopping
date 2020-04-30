@@ -15,42 +15,37 @@
     <form class="layui-form" action="" id="regForm">
 
         <div class="layui-form-item">
-        <label class="layui-form-label">商品名</label>
-        <div class="layui-input-inline">
-            <input type="text" id="sname" name="sname" lay-verify="required" autocomplete="off" class="layui-input"
-                   placeholder="请输入商品名称">
-        </div>
-        </div>
-
-        <div class="layui-form-item">
-        <label class="layui-form-label">商品单价</label>
-        <div class="layui-input-inline">
-            <input type="number" id="smoney" name="smoney" lay-verify="smoney" autocomplete="off" class="layui-input"
-                   placeholder="请输入商品单价">
-        </div>
-        </div>
-
-
-        <div class="layui-form-item">
-        <label class="layui-form-label">商品数量</label>
-        <div class="layui-input-inline">
-            <input type="number" id="scount" name="scount" lay-verify="scount" autocomplete="off" class="layui-input"
-                   placeholder="请输入商品数量">
-        </div>
-        </div>
-
-        <div class="layui-form-item">
-        <label class="layui-form-label">进货时间</label>
+            <label class="layui-form-label">商品名</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="test22" name="sstarttime" lay-verify="required" placeholder="yyyy-MM-dd">
+                <input type="text" id="sname" name="sname" lay-verify="required" autocomplete="off" class="layui-input"
+                       placeholder="请输入商品名称">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品单价</label>
+            <div class="layui-input-inline">
+                <input type="number" id="smoney" name="smoney" lay-verify="smoney" autocomplete="off"
+                       class="layui-input"
+                       placeholder="请输入商品单价">
             </div>
         </div>
 
 
         <div class="layui-form-item">
-        <label class="layui-form-label">保质期到期时间</label>
+            <label class="layui-form-label">商品数量</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="test23" name="sendtime" lay-verify="required" placeholder="yyyy-MM-dd">
+                <input type="number" id="scount" name="scount" lay-verify="scount" autocomplete="off"
+                       class="layui-input"
+                       placeholder="请输入商品数量">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">保质期到期时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="test23" name="sendtime" lay-verify="required"
+                       placeholder="yyyy-MM-dd">
             </div>
         </div>
 
@@ -62,7 +57,14 @@
 </div>
 
 <script>
-	var reg=/^[0-9]+.?[0-9]*$/;
+
+	function chack_name(str) {
+		var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]");
+		if (pattern.test(str)) {
+			return true;
+		}
+		return false;
+	}
 
 	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
 		var form = layui.form,
@@ -73,43 +75,45 @@
 		//获取当前时间
 		var date = new Date();
 		var y = date.getFullYear();
-		var m = date.getMonth()+1;
+		var m = date.getMonth() + 1;
 		var d = date.getDate();
-		var now = ""+y+"-"+m+"-"+d;
+		var now = "" + y + "-" + m + "-" + d;
 
 		//进货时间
 		laydate.render({
 			elem: '#test22'
-			,showBottom: false
-			,min: now
+			, showBottom: false
+			, min: now
 		});
 
 		//保质期到期时间
 		laydate.render({
 			elem: '#test23'
-			,showBottom: false
-			,min: now
+			, showBottom: false
+			, min: now
 		});
 
 		//自定义验证规则
 		form.verify({
-			smoney: function(value){
-				if(reg.test(value)){
-					if(parseInt(value)>100 || parseInt(value)<1){
+			smoney: function (value) {
+				//判断是否为整数
+				if (value % 1 === 0) {
+					//判断范围是否在1-100之间
+					if (value > 100 || value < 1) {
 						return '请输入1-100的整数';
 					}
-                }else {
+				} else {
 					return '请输入1-100的整数';
 				}
 			},
-			scount: function(value){
-				if(reg.test(value)){
-					if(parseInt(value)<1){
+			scount: function (value) {
+				if (reg.test(value)) {
+					if (parseInt(value) < 1) {
 						return '请输入大于1的整数';
 					}
-                }else {
+				} else {
 					return '请输入大于1的整数';
-                }
+				}
 			}
 		});
 

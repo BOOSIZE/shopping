@@ -30,15 +30,29 @@ public interface GoodsMapper
 	 * @Param [sname]
 	 * @return int
 	 **/
-	public int queryNewsWithParamTotalNum(String sname);
+	int queryNewsWithParamTotalNum(String sname);
 
 	/**
-	 * @Description:
+	 * @Description: 查询客户购买列表
+	 * @Param [sname, now]
+	 * @return int
+	 **/
+	int queryBuyGoodsListNum(String sname,String now);
+
+	/**
+	 * @Description: 获取管理员端列表
 	 * @Param [sname]
 	 * @return java.util.List<com.example.shopping.entity.Shopinfo>
 	 **/
-	public List<Shopinfo> queryNewsWithParam(String sname,int statrNum,int limit);
+	List<Shopinfo> queryNewsWithParam(String sname,int statrNum,int limit);
 
+
+	/**
+	 * @Description: 获取客户端列表
+	 * @Param [sname, now, statrNum, limit]
+	 * @return java.util.List<com.example.shopping.entity.Shopinfo>
+	 **/
+	List<Shopinfo> queryBuyGoodsList(String sname,String now,int statrNum,int limit);
 
 	/**
 	 * 更新状态

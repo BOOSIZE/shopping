@@ -26,6 +26,31 @@
         order by SENDTIME limit ${statrNum},${limit}
     </select>
 
+    <select id="queryBuyGoodsListNum" resultType="integer">
+        select count(*) from shopinfo
+        <where>
+            <if test="sname !=null and sname!=''">
+                and sname like CONCAT('%','${sname}','%')
+            </if>
+            <if test="now !=null and now!=''">
+                and sendtime > #{now}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBuyGoodsList" resultType="com.example.shopping.entity.Shopinfo">
+        select * from shopinfo
+        <where>
+            <if test="sname !=null and sname!=''">
+                and sname like CONCAT('%','${sname}','%')
+            </if>
+            <if test="now !=null and now!=''">
+                and sendtime > #{now}
+            </if>
+        </where>
+        order by SENDTIME limit ${statrNum},${limit}
+    </select>
+
     <select id="querySingleNews" resultType="com.example.shopping.entity.Shopinfo">
         select * from journalism where jid = ${jid};
     </select>

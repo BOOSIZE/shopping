@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * 新闻资讯业务实现类
+ *
  * @author Stephen
  */
 @Service()
@@ -27,29 +28,27 @@ public class GoodsServiceImpl implements GoodsService
 
 
 	@Override
-	public String getList(String sname,Integer page,Integer limit)
+	public String getList(String sname, Integer page, Integer limit)
 	{
 
 		//设置起始和限制条数
 		int statrdNum = ((page - 1) * limit);
 		List<Shopinfo> shopinfos = goodsMapper.queryNewsWithParam(sname, statrdNum, limit);
 
-
-		SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-dd");
-		String now=sdf.format(new Date());
-		Calendar calendar=Calendar.getInstance();
-		calendar.add(Calendar.DATE,7);
-		String error=sdf.format(calendar.getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		String now = sdf.format(new Date());
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, 7);
+		String error = sdf.format(calendar.getTime());
 		for (Shopinfo shopinfo : shopinfos)
 		{
 			shopinfo.setTips("未过期");
-			if(shopinfo.getSendtime().compareTo(now)<=0)
+			if (shopinfo.getSendtime().compareTo(now) <= 0)
 			{
 				shopinfo.setTips("已过期");
-			}
-			else
+			} else
 			{
-				if(shopinfo.getSendtime().compareTo(error)<=0)
+				if (shopinfo.getSendtime().compareTo(error) <= 0)
 				{
 					shopinfo.setTips("即将过期");
 				}
@@ -57,16 +56,38 @@ public class GoodsServiceImpl implements GoodsService
 		}
 
 		//设置回传的表格参数
-		TableModel tableModel=new TableModel();
+		TableModel tableModel = new TableModel();
 		tableModel.setCount(goodsMapper.queryNewsWithParamTotalNum(sname));
 		tableModel.setData(shopinfos);
 		return new Gson().toJson(tableModel);
 	}
 
+	/**
+	 * @Description: 获取客户端列表
+	 * @Param [sname, page, limit]
+	 * @return java.lang.String
+	 **/
 	@Override
-	public String insertGoods(String sname,String smoney,String scount,String sstarttime,String sendtime)
+	public String getBuyList(String sname, Integer page, Integer limit)
 	{
-		return new Gson().toJson(goodsMapper.insertGoods(sname,smoney,scount,sstarttime,sendtime));
+		//设置起始和限制条数
+		int statrdNum = ((page - 1) * limit);
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		String now = sdf.format(new Date());
+
+		//获取表格参数
+		TableModel tableModel = new TableModel();
+		tableModel.setCount(goodsMapper.queryBuyGoodsListNum(sname,now));
+		tableModel.setData(goodsMapper.queryBuyGoodsList(sname,now,statrdNum,limit));
+		return new Gson().toJson(tableModel);
+	}
+
+	@Override
+	public String insertGoods(String sname, String smoney, String scount,String sendtime)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		String sstarttime = sdf.format(new Date());
+		return new Gson().toJson(goodsMapper.insertGoods(sname, smoney, scount, sstarttime, sendtime));
 	}
 
 
@@ -79,39 +100,7 @@ public class GoodsServiceImpl implements GoodsService
 	@Override
 	public int updatePrice(String sid, String smoney)
 	{
-		return goodsMapper.updatePrice(sid,smoney);
+		return goodsMapper.updatePrice(sid, smoney);
 	}
-
-
-	@Override
-	public List<Shopinfo> queryAllNews(String type)
-	{
-		return null;
-	}
-
-	@Override
-	public TableModel queryAllNewsWithLimit(Map<String, String> map)
-	{
-		return null;
-	}
-
-	@Override
-	public Shopinfo querySingleNews(int jid)
-	{
-		return null;
-	}
-
-	@Override
-	public TableModel queryNewsWithParam(Map<String, String> map)
-	{
-		return null;
-	}
-
-	@Override
-	public int updateNewsContent(Map<String, String> map)
-	{
-		return 0;
-	}
-
 
 }

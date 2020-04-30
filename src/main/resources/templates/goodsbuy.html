@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>商品管理</title>
+    <title>商品购买</title>
     <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <script th:src="@{/js/layui/layui.js}"></script>
     <script th:src="@{/js/jquery-3.4.1.js}"></script>
@@ -20,7 +20,6 @@
                    placeholder="请输入商品名称">
         </div>
         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-        <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="addgoods">新增</button>
         <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
     </div>
 </form>
@@ -29,8 +28,8 @@
 
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">修改单价</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">下架</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">购买商品</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">加入购物车</a>
 </script>
 
 
@@ -55,7 +54,6 @@
 				, {field: 'scount', title: '剩余数量',align: 'center', width: 100, unresize: false}
 				, {field: 'sstarttime', title: '进货日期', align: 'center', width: 130, unresize: false}
 				, {field: 'sendtime', title: '保质期到期日期', align: 'center', width: 130, unresize: false}
-				, {field: 'tips', title: '保质期预警', align: 'center', width: 120, unresize: false}
 				, {field: 'ssole', title: '销量', align: 'center', width: 70, unresize: false}
 				, {fixed: 'right', title: '操作', fixed: 'right', align: 'center', toolbar: '#barDemo', width: 200}
 			]]
@@ -152,19 +150,6 @@
 				, method: 'post'
 			});
 			return false;//false：阻止表单跳转  true：表单跳转
-		});
-
-		form.on('submit(addgoods)', function (data) {
-			layer.open({
-				type: 2,
-				area: ['45%', '90%'],
-				title: false,
-				offset: '20px',
-				shadeClose: true,
-				scrollbar: true,
-				content: ['addgoods.html']
-			});
-			return false;
 		});
 	});
 
