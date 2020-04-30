@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shopping.dao.GoodsMapper">
+
+    <insert id="insertNewsContent">
+        insert into journalism(jtitle, jabstract, jtext, jauthor, jtime, jyear, jmonth, jday,jliulan,jstatue,jtype)
+        values (#{jtitle},#{jabstract},#{jtext},#{jauthor},#{jtime},#{jyear},#{jmonth},#{jday},#{jliulan},1,#{jtype})
+    </insert>
+
+    <select id="queryNewsWithParamTotalNum" parameterType="String" resultType="integer">
+        select count(*) from shopinfo
+        <where>
+            <if test="sname !=null and sname!=''">
+                and sname like CONCAT('%','${sname}','%')
+            </if>
+        </where>
+    </select>
+
+    <select id="queryNewsWithParam" parameterType="String" resultType="com.example.shopping.entity.Shopinfo">
+        select * from shopinfo
+        <where>
+            <if test="sname !=null and sname!=''">
+                and sname like CONCAT('%','${sname}','%')
+            </if>
+        </where>
+        order by SENDTIME desc limit ${statrNum},${limit}
+    </select>
+
+    <select id="querySingleNews" resultType="com.example.shopping.entity.Shopinfo">
+        select * from journalism where jid = ${jid};
+    </select>
+
+    <update id="updateNewsStatue">
+        update journalism set jstatue=#{statue} where jid=#{jid}
+    </update>
+
+    <update id="updateNewsContent">
+        update journalism set jtitle=#{jtitle},jabstract=#{jabstract},jtext=#{jtext},jauthor=#{jauthor},
+        jtime=#{jtime},jyear=#{jyear},jmonth=#{jmonth},jday=#{jday},jliulan=#{jliulan} where jid=#{jid}
+    </update>
+</mapper>
+	

@@ -1,5 +1,8 @@
 package com.example.shopping.controller;
 
+import com.example.shopping.service.GoodsService;
+import com.example.shopping.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,10 +20,20 @@ import javax.servlet.http.HttpServletRequest;
 public class GoodsController
 {
 
+	@Autowired
+	private GoodsService goodsServiceImpl;
+
+	
+	/**
+	 * @Description: 获取列表
+	 * @Param [sname, page, limit, request]
+	 * @return java.lang.String
+	 **/
 	@RequestMapping("getList")
-	public String getList(String account, String password, HttpServletRequest request)
+	@ResponseBody
+	public String getList(String sname,Integer page,Integer limit, HttpServletRequest request)
 	{
-		return "goodsmanage";
+		return goodsServiceImpl.getList(sname,page,limit);
 	}
 
 }

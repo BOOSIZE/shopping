@@ -13,24 +13,13 @@ layui.use(['table', 'jquery'], function () {
 
 	table.render({
 		elem: '#test'
-		, url: path + '/homepage/queryNewsList'
+		, url: path + '/goods/getList'
 		, title: '商品管理'
 		, limit: 7
 		, limits: ['7']
 		, page: true
 		, cols: [[
-			{field: 'jtime', title: '更新时间', width: 170, unresize: false, align: 'center', sort: true}
-			, {
-				field: 'jtype', title: '文章类型', width: 100, align: 'center', unresize: false, templet: function (obj) {
-					switch (obj.jtype) {
-						case 1:
-							return "新闻资讯";
-						case 2:
-							return "考试攻略";
-					}
-				}
-			}
-			, {field: 'jtitle', title: '商品名', width: 220, unresize: false}
+			{field: 'jtitle', title: '商品名', width: 220, unresize: false}
 			, {field: 'jabstract', title: '商品单价', width: 170, unresize: false}
 			, {field: 'jtext', title: '剩余数量', width: 170, unresize: false}
 			, {field: 'jauthor', title: '进货日期', align: 'center', width: 80, unresize: false}
@@ -188,7 +177,7 @@ layui.use(['table', 'layer', 'form', 'laypage', 'laydate'], function () {
 				curr: 1 //重新从第 1 页开始
 			}
 			, where: formData
-			, url: path + '/homepage/queryNewsWithParam'//后台做模糊搜索接口路径
+			, url: path + '/goods/getList'//后台做模糊搜索接口路径
 			, method: 'post'
 		});
 		return false;//false：阻止表单跳转  true：表单跳转

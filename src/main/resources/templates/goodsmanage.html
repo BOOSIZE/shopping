@@ -6,7 +6,7 @@
     <title>商品管理</title>
     <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <script th:src="@{/js/layui/layui.js}"></script>
-    <script th:src="@{/js/goods/goodstable.js}"></script>
+<!--    <script th:src="@{/js/goods/goodstable.js}"></script>-->
     <script th:src="@{/js/jquery-3.4.1.js}"></script>
 </head>
 <body>
@@ -15,54 +15,198 @@
 <form class="layui-form" action="" lay-filter="frm">
     <div class="layui-form-item">
 
-        <label class="layui-form-label">文章标题</label>
+        <label class="layui-form-label">商品名</label>
         <div class="layui-input-inline">
-            <input type="text" id="jtitle" name="jtitle" autocomplete="off" class="layui-input"
-                   placeholder="请输入文章标题">
+            <input type="text" id="sname" name="sname" autocomplete="off" class="layui-input"
+                   placeholder="请输入商品名称">
         </div>
-
-        <label class="layui-form-label">文章作者</label>
-        <div class="layui-input-inline">
-            <input type="text" id="jauthor" name="jauthor" autocomplete="off" class="layui-input"
-                   placeholder="请输入文章作者">
-        </div>
-
-        <label class="layui-form-label">文章状态</label>
-        <div class="layui-input-inline">
-            <select name="jstatue" id="jstatue" lay-filter="jstatue">
-                <option value="" selected=""></option>
-                <option value="1">启用</option>
-                <option value="2">禁用</option>
-                <option value="3">已删除</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">文章类型</label>
-            <div class="layui-input-inline">
-                <select name="jtype" id="jtype" lay-filter="jtype">
-                    <option value="" selected=""></option>
-                    <option value="1">新闻资讯</option>
-                    <option value="2">考试攻略</option>
-                </select>
-            </div>
-
-            <label class="layui-form-label">操作时间</label>
-            <div class="layui-input-inline">
-                <input type="text" name="jtime" class="layui-input" id="test6" placeholder="请选择时间">
-            </div>
-
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="addnews">新增</button>
-            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
-        </div>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="addnews">新增</button>
+        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
     </div>
 </form>
 
-<table class="layui-hide" id="test" lay-filter="test"></table>
+<table id="test" lay-filter="test"></table>
 
+<script type="text/javascript"  th:inline="none">
+
+	layui.use(['table', 'jquery'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+
+		table.render({
+			elem: '#test'
+			, url: '/goods/getList'
+			, title: '商品管理'
+			, limit: 7
+			, limits: ['7']
+			, page: true
+			, cols: [[
+				{field: 'sname', title: '商品名', width: 180, unresize: false}
+				, {field: 'smoney', title: '商品单价', width: 100, unresize: false}
+				, {field: 'scount', title: '剩余数量', width: 100, unresize: false}
+				, {field: 'sstarttime', title: '进货日期', align: 'center', width: 150, unresize: false}
+				, {field: 'sendtime', title: '保质期到期日期', align: 'center', width: 150, unresize: false}
+				// , {
+				// 	field: 'jstatue', title: '保质期预警', width: 100, align: 'center', unresize: false, templet: function (obj) {
+				// 		switch (obj.jstatue) {
+				// 			case 1:
+				// 				return "启用";
+				// 			case 2:
+				// 				return "禁用";
+				// 			case 3:
+				// 				return "已删除";
+				// 		}
+				// 	}
+				// }
+				, {field: 'ssole', title: '销量', align: 'center', width: 70, unresize: false}
+				, {fixed: 'right', title: '操作', fixed: 'right', align: 'center', toolbar: '#barDemo', width: 200}
+			]]
+		});
+
+		//监听行工具事件
+		table.on('tool(test)', function (obj) {
+			var data = obj.data;
+			var id = data.jid;
+			console.log(data);
+
+			if (obj.event === 'enable') {
+				layer.confirm('是否确认启用该文章？', function (index) {
+					if (data.jstatue === 1) {
+						layer.msg("该文章已被启用，请勿重复点击！");
+					} else if (data.jstatue === 3) {
+						layer.msg("该文章已被删除，无法启用！");
+					} else {
+						$.ajax({
+							type: "post"
+							, url: path + '/homepage/updateNewsStatue'
+							//预期服务器返回的数据类型;
+							, datatype: "text"
+							//从该js会发出到服务器的数据
+							, data: {"jid": id, "statue": 1}
+							//从servlet接收的数据
+							, success: function (msg) {
+								if (msg === 1) {
+									layer.msg("修改成功！");
+									obj.update({
+										jstatue: 1
+									})
+								} else {
+									layer.msg("修改失败！")
+								}
+							}
+							, error: function () {
+								alert("服务器正忙.....");
+							}
+						});
+					}
+					layer.close(index);
+				});
+			} else if (obj.event === 'disable') {
+				layer.confirm('是否确认禁用该文章？', function (index) {
+					if (data.jstatue === 2) {
+						layer.msg("该文章已被禁用，请勿重复点击！");
+					} else if (data.jstatue === 3) {
+						layer.msg("该文章已被删除，无法启用！");
+					} else {
+						$.ajax({
+							type: "post"
+							, url: path + '/homepage/updateNewsStatue'
+							//预期服务器返回的数据类型;
+							, datatype: "text"
+							//从该js会发出到服务器的数据
+							, data: {"jid": id, "statue": 2}
+							//从servlet接收的数据
+							, success: function (msg) {
+								if (msg === 1) {
+									layer.msg("修改成功！");
+									obj.update({
+										jstatue: 2
+									})
+								} else {
+									layer.msg("修改失败！")
+								}
+							}
+							, error: function () {
+								alert("服务器正忙.....");
+							}
+						});
+					}
+					layer.close(index);
+				});
+			} else if (obj.event === 'delete') {
+				layer.confirm('是否确认删除该文章？', function (index) {
+					if (data.jstatue === 3) {
+						layer.msg("该文章已被删除，请勿重复点击！");
+					} else {
+						$.ajax({
+							type: "post"
+							, url: path + '/homepage/updateNewsStatue'
+							//预期服务器返回的数据类型;
+							, datatype: "text"
+							//从该js会发出到服务器的数据
+							, data: {"jid": id, "statue": 3}
+							//从servlet接收的数据
+							, success: function (msg) {
+								if (msg === 1) {
+									layer.msg("修改成功！");
+									obj.update({
+										jstatue: 3
+									})
+								} else {
+									layer.msg("修改失败！")
+								}
+							}
+							, error: function () {
+								alert("服务器正忙.....");
+							}
+						});
+					}
+					layer.close(index);
+				});
+			} else if (obj.event === 'edit') {
+				layer.open({
+					type: 2,
+					area: ['90%', '90%'],
+					title: false,
+					offset: '20px',
+					shadeClose: true,
+					scrollbar: true,
+					content: ['editdemo.jsp'],
+					success: function (layero, index) {
+						var iframe = window['layui-layer-iframe' + index];
+						iframe.selectinfo(data);
+					}
+				});
+			}
+		});
+	});
+
+	//多条件查询
+	layui.use(['table', 'layer', 'form', 'laypage', 'laydate'], function () {
+		var table = layui.table //表格
+			, layer = layui.layer //弹层
+			, form = layui.form //form表单
+
+		//绑定的按钮是submit 监听提交 lay-filter="search"
+		form.on('submit(demo1)', function (data) {
+			var formData = data.field;
+			console.log(formData);
+
+			//执行重载
+			table.reload('test', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				}
+				, where: formData
+				, url: '/goods/getList'//后台做模糊搜索接口路径
+				, method: 'post'
+			});
+			return false;//false：阻止表单跳转  true：表单跳转
+		});
+	});
+
+</script>
 
 </body>
 </html>

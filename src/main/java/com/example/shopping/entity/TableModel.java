@@ -4,9 +4,9 @@ import java.util.List;
 
 public class TableModel
 {
-	private String msg;
+	private String msg="";
 	private int count;
-	private int code;
+	private int code=0;
 	private List<?> data;
 
 	public String getMsg()
