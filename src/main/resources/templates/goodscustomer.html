@@ -62,30 +62,23 @@
 			var data = obj.data;
 			var id = data.sid;
 			console.log(data);
-			if (obj.event === 'delete') {
-				layer.confirm('是否确认下架该商品？', function (index) {
-					$.ajax({
-						type: "post"
-						, url: '/goods/deleteGoods'
-						//预期服务器返回的数据类型;
-						, datatype: "text"
-						//从该js会发出到服务器的数据
-						, data: {"sid": id}
-						//从servlet接收的数据
-						, success: function (msg) {
-							if (msg === 1) {
-								layer.msg("删除成功！");
-								window.location.href="/go/to/goodscutomer";
-							} else {
-								layer.msg("删除失败！")
-							}
-						}
-						, error: function () {
-							alert("服务器正忙.....");
-						}
-					});
-					layer.close(index);
+
+			if (obj.event === 'add') {
+
+				layer.open({
+					type: 2,
+					area: ['45%', '90%'],
+					title: false,
+					offset: '20px',
+					shadeClose: true,
+					scrollbar: true,
+					content: ['addcar.html'],
+					success: function (layero, index) {
+						var iframe = window['layui-layer-iframe' + index];
+						iframe.selectinfo(data);
+					}
 				});
+				return false;
 			} else if (obj.event === 'buy') {
 
 				layer.open({
