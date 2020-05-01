@@ -30,4 +30,7 @@ public interface UserDao
 			"<when test='uname!=null'> AND UNAME LIKE CONCAT ('%',#{uname},'%')</when> " +
 			"<when test='urole!=null'> AND UROLE =#{urole}</when></script>")
 	public abstract int getSum(String uname,String urole);
+
+	@Update("UPDATE USERINFO SET UMONEY=#{umoney} WHERE UACCOUNT=#{uaccount}")
+	public abstract int updateMoney(String uaccount,String umoney);
 }
