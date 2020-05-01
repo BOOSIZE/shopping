@@ -12,6 +12,7 @@
 <div id="div">
     <br>
     <br>
+    <input type="hidden" id="umoney" th:value="${session.user.umoney}">
     <form class="layui-form" action="" id="regForm">
 
         <div class="layui-form-item">
@@ -63,11 +64,12 @@
 </div>
 
 <script>
-
+    var sid;
 
 	function selectinfo(data) {
 		$("#sname").val(data.sname);
 		$("#smoney").val(data.smoney);
+		sid = data.sid;
 	}
 
 	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
@@ -97,84 +99,54 @@
 			, min: now
 		});
 
-		//自定义验证规则
-		form.verify({
-			smoney: function (value) {
-				//判断是否为整数
-				if (value % 1 === 0) {
-					//判断范围是否在1-100之间
-					if (value > 100 || value < 1) {
-						return '请输入1-100的整数';
-					}
-				} else {
-					return '请输入1-100的整数';
-				}
-			},
-			scount: function (value) {
-				if (value % 1 === 0) {
-					if (value < 1) {
-						return '请输入大于1的整数';
-					}
-				} else {
-					return '请输入大于1的整数';
-				}
-			}
-		});
-
 		form.on("select", function(data){
-
 			var num = parseInt(data.value);
 			var price = parseInt($("#smoney").val());
 			var totalPrice = num*price;
-
-			console.log(num);
-			console.log(price);
-			console.log(totalPrice);
-
 			$("#total").text(totalPrice);
 		});
 
 		//绑定的按钮是submit 监听提交 lay-filter="search"
 		form.on('submit(demo2)', function (data) {
 			var formData = data.field;
-			var sname = formData.sname;
-			var smoney = formData.smoney;
-			var scount = formData.scount;
-			var sstarttime = formData.sstarttime;
-			var sendtime = formData.sendtime;
+			var price = formData.smoney;
+			var num = formData.buynum;
+			var total = parseInt(price)*parseInt(num);
+			var umoney = parseInt($("#umoney").val());
 
-			console.log(formData);
-
-			$.ajax({
-				type: "post"
-				,
-				url: '/goods/insertGoods'
-				//预期服务器返回的数据类型;
-				,
-				datatype: "text"
-				//从该js会发出到服务器的数据
-				,
-				data: {
-					"sname": sname,
-					"smoney": smoney,
-					"scount": scount,
-					"sstarttime": sstarttime,
-					"sendtime": sendtime
-				}
-				//从servlet接收的数据
-				,
-				success: function (msg) {
-					if (msg === "1") {
-						layer.msg("新增成功！");
-						parent.location.reload();
-					} else {
-						layer.msg("新增失败！")
+			if(umoney>total){
+				$.ajax({
+					type: "post"
+					,
+					url: '/goods/buyGoods'
+					//预期服务器返回的数据类型;
+					,
+					datatype: "text"
+					//从该js会发出到服务器的数据
+					,
+					data: {
+						"total": total,
+						"price": price,
+						"num": num,
+						"sid":sid
 					}
-				},
-				error: function () {
-					alert("服务器正忙.....");
-				}
-			});
+					//从servlet接收的数据
+					,
+					success: function (msg) {
+						if (msg === "1") {
+							layer.msg("支付成功！");
+							parent.location.reload();
+						} else {
+							layer.msg("支付失败！")
+						}
+					},
+					error: function () {
+						alert("服务器正忙.....");
+					}
+				});
+            }else {
+                alert("余额不足，请充值");
+            }
 			return false;//false：阻止表单跳转  true：表单跳转
 		});
 

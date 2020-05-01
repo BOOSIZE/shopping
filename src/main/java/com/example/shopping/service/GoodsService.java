@@ -3,6 +3,7 @@ package com.example.shopping.service;
 import com.example.shopping.entity.Shopinfo;
 import com.example.shopping.entity.TableModel;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +45,13 @@ public interface GoodsService
 	 * @return int
 	 **/
 	int updatePrice(String sid,String smoney);
+
+
+	/**
+	 * @Description: 购买商品
+	 * @Param [sid, total, price, num, request]
+	 * @return int
+	 **/
+	int buyGoods(String sid, String total, String price, String num,HttpServletRequest request);
 
 }

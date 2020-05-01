@@ -83,4 +83,11 @@ public class GoodsController
 		System.out.println(sid+" "+smoney);
 		return goodsServiceImpl.updatePrice(sid,smoney);
 	}
+
+	@RequestMapping("buyGoods")
+	@ResponseBody
+	public int updatePrice(String sid, String total, String price, String num){
+		System.out.println(total+" "+price+" "+num+" ");
+		return 1;
+	}
 }

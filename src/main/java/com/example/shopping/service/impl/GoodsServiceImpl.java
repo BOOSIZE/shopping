@@ -1,13 +1,16 @@
 package com.example.shopping.service.impl;
 
 import com.example.shopping.dao.GoodsMapper;
+import com.example.shopping.dao.UserMapper;
 import com.example.shopping.entity.Shopinfo;
 import com.example.shopping.entity.TableModel;
+import com.example.shopping.entity.Userinfo;
 import com.example.shopping.service.GoodsService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +29,8 @@ public class GoodsServiceImpl implements GoodsService
 	@Autowired(required = false)
 	private GoodsMapper goodsMapper;
 
+	@Autowired(required = false)
+	private UserMapper userMapper;
 
 	@Override
 	public String getList(String sname, Integer page, Integer limit)
@@ -106,6 +111,24 @@ public class GoodsServiceImpl implements GoodsService
 	public int updatePrice(String sid, String smoney)
 	{
 		return goodsMapper.updatePrice(sid, smoney);
+	}
+
+	@Override
+	public int buyGoods(String sid, String total, String price, String num, HttpServletRequest request)
+	{
+		//获取当前时间
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+		String ttime = sdf.format(new Date());
+
+		//获取当前用户数据
+		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
+		String uaccount = user.getUaccount();
+		String umoney = Integer.valueOf(user.getUmoney())-Integer.valueOf(total)+"";
+		userMapper.updateMoney(uaccount,umoney);
+
+
+
+		return 0;
 	}
 
 }
