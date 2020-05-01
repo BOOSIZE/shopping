@@ -1,5 +1,7 @@
 package com.example.shopping.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author StephenGAO
  * @version 1.0
@@ -21,5 +23,5 @@ public interface MoneyService
 	 * @param
 	 * @return
 	 */
-	int chargeMoney(String uaccount,String tmoney);
+	int chargeMoney(String tmoney, HttpServletRequest request);
 }

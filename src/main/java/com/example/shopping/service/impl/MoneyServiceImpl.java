@@ -2,12 +2,15 @@ package com.example.shopping.service.impl;
 
 import com.example.shopping.dao.GoodsMapper;
 import com.example.shopping.dao.MoneyMapper;
+import com.example.shopping.dao.UserDao;
 import com.example.shopping.entity.TableModel;
+import com.example.shopping.entity.Userinfo;
 import com.example.shopping.service.MoneyService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,6 +26,9 @@ public class MoneyServiceImpl implements MoneyService
 
 	@Autowired(required = false)
 	private MoneyMapper moneyMapper;
+
+	@Autowired(required = false)
+	private UserDao userDao;
 
 	/**
 	 * @Description: 获取资金列表
@@ -44,10 +50,20 @@ public class MoneyServiceImpl implements MoneyService
 	}
 
 	@Override
-	public int chargeMoney(String uaccount, String tmoney)
+	public int chargeMoney(String tmoney, HttpServletRequest request)
 	{
+		//获取当前时间
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		String ttime = sdf.format(new Date());
+
+		//获取当前用户
+		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
+		String uaccount = user.getUaccount();
+
+		//当前用户充值完之后的余额，并更新
+		String umoney = Integer.valueOf(user.getUmoney())+Integer.valueOf(tmoney)+"";
+		userDao.updateMoney(uaccount, umoney);
+
 		return moneyMapper.chargeMoney(uaccount,tmoney,ttime);
 	}
 }

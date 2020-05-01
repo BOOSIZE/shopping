@@ -48,11 +48,7 @@ public class MoneyController
 	@ResponseBody
 	public int insertGoods(String tmoney,String scount,String sendtime,HttpServletRequest request){
 
-		//获取当前用户
-		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
-		String uaccount = user.getUaccount();
-
 		//返回充值消息
-		return moneyServiceImpl.chargeMoney(uaccount,tmoney);
+		return moneyServiceImpl.chargeMoney(tmoney,request);
 	}
 }
