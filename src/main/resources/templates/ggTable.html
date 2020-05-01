@@ -11,6 +11,7 @@
 <button class="layui-btn"  id="add" th:if="${session.user.urole=='1'}">新增公告</button>
 
 <table id="demo" lay-filter="test"></table>
+<input th:value="${session.user.urole}" id="urole" hidden="hidden">
 
 
 <script type="text/html" id="bar" th:if="${session.user.urole=='1'}">
@@ -33,9 +34,14 @@
 					{field: 'uaccount', title: '发布账号', width:'15%'}
 					,{field: 'gtext', title: '公告内容', width:'40%'}
 					,{field: 'gtime', title: '发布时间', width:'15%'}
-					,{title:'操作',width:'20%',toolbar:"#bar"}
+					,{field:"aa",title:'操作',width:'20%',toolbar:"#bar"}
 				]
 			]
+			, done: function(){
+				if($('#urole').val() == '2') {
+					$("[data-field='aa']").css('display', 'none');
+				}
+			}
 		});
 
 
