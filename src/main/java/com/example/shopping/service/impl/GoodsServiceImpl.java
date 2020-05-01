@@ -1,7 +1,9 @@
 package com.example.shopping.service.impl;
 
 import com.example.shopping.dao.GoodsMapper;
+import com.example.shopping.dao.OrderMapper;
 import com.example.shopping.dao.UserMapper;
+import com.example.shopping.entity.Orderinfo;
 import com.example.shopping.entity.Shopinfo;
 import com.example.shopping.entity.TableModel;
 import com.example.shopping.entity.Userinfo;
@@ -31,6 +33,9 @@ public class GoodsServiceImpl implements GoodsService
 
 	@Autowired(required = false)
 	private UserMapper userMapper;
+
+	@Autowired(required = false)
+	private OrderMapper orderMapper;
 
 	@Override
 	public String getList(String sname, Integer page, Integer limit)
@@ -113,8 +118,13 @@ public class GoodsServiceImpl implements GoodsService
 		return goodsMapper.updatePrice(sid, smoney);
 	}
 
+	/**
+	 * @Description: 购买商品
+	 * @Param [sid, oname, total, price, num, request]
+	 * @return int
+	 **/
 	@Override
-	public int buyGoods(String sid, String total, String price, String num, HttpServletRequest request)
+	public int buyGoods(String sid,String oname, String total, String num, HttpServletRequest request)
 	{
 		//获取当前时间
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -124,11 +134,27 @@ public class GoodsServiceImpl implements GoodsService
 		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
 		String uaccount = user.getUaccount();
 		String umoney = Integer.valueOf(user.getUmoney())-Integer.valueOf(total)+"";
-		userMapper.updateMoney(uaccount,umoney);
 
+		//插入订单
+		Orderinfo orderinfo = new Orderinfo();
+		orderinfo.setSid(Long.valueOf(sid));
+		orderinfo.setOname(oname);
+		orderinfo.setOcount(num);
+		orderinfo.setOmoney(total);
+		orderinfo.setOtime(ttime);
+		orderinfo.setUaccount(uaccount);
+		int i = orderMapper.addOrder(orderinfo);
 
+		//更新用户余额,更新session域
+		int j = userMapper.updateMoney(uaccount, umoney);
+		Userinfo user1 = userMapper.getUser(uaccount);
+		request.getSession().setAttribute("user",user1);
 
-		return 0;
+		int r = 0;
+
+		if(i==1&&j==1){
+			r=1;
+		}
+		return r;
 	}
-
 }

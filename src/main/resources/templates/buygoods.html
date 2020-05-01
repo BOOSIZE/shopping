@@ -112,6 +112,7 @@
 			var price = formData.smoney;
 			var num = formData.buynum;
 			var total = parseInt(price)*parseInt(num);
+			var oname = $("#sname").val();
 			var umoney = parseInt($("#umoney").val());
 
 			if(umoney>total){
@@ -128,14 +129,14 @@
 						"total": total,
 						"price": price,
 						"num": num,
+                        "oname":oname,
 						"sid":sid
 					}
 					//从servlet接收的数据
 					,
 					success: function (msg) {
-						if (msg === "1") {
+						if (msg === 1) {
 							layer.msg("支付成功！");
-							parent.location.reload();
 						} else {
 							layer.msg("支付失败！")
 						}

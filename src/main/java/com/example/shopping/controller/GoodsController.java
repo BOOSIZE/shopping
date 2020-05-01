@@ -84,10 +84,14 @@ public class GoodsController
 		return goodsServiceImpl.updatePrice(sid,smoney);
 	}
 
+	/**
+	 * @Description: 购买商品
+	 * @Param [sid, total, price, num, oname, request]
+	 * @return int
+	 **/
 	@RequestMapping("buyGoods")
 	@ResponseBody
-	public int updatePrice(String sid, String total, String price, String num){
-		System.out.println(total+" "+price+" "+num+" ");
-		return 1;
+	public int updatePrice(String sid, String total, String price, String num,String oname,HttpServletRequest request){
+		return goodsServiceImpl.buyGoods(sid,oname,total,num,request);
 	}
 }

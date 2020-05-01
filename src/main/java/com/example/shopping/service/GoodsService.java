@@ -52,6 +52,6 @@ public interface GoodsService
 	 * @Param [sid, total, price, num, request]
 	 * @return int
 	 **/
-	int buyGoods(String sid, String total, String price, String num,HttpServletRequest request);
+	int buyGoods(String sid, String oname, String total,String num, HttpServletRequest request);
 
 }
