@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface MenuDao
+public interface MenuMapper
 {
 
 	@Select("SELECT * FROM MENUINFO WHERE MROLE=#{mrole}")
