@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService
 	@Autowired(required = false)
 	private UserDao userDao;
 
+	@Autowired(required = false)
+	private MenuDao menuDao;
+
 	@Override
 	public String updateUserType(String utype,String uaccount)
 	{
@@ -42,16 +45,31 @@ public class UserServiceImpl implements UserService
 			urole=null;
 		}
 		TableModel tableModel=new TableModel();
-		tableModel.setCode(0);
-		tableModel.setMsg("");
 		tableModel.setCount(userDao.getSum(uname,urole));
 		tableModel.setData(userDao.getList(limit,limit*(page-1),uname,urole));
 		Gson gson=new Gson();
 		return gson.toJson(tableModel);
 	}
 
-	@Autowired(required = false)
-	private MenuDao menuDao;
+
+
+	@Override
+	public String addAdmin(Userinfo userinfo)
+	{
+		String str="no";
+		Userinfo userinfo2=userDao.getUser(userinfo.getUaccount());
+		if(userinfo2==null)
+		{
+			userinfo.setUrole(1+"");
+			userinfo.setUregtime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+			int n=userDao.reg(userinfo);
+			if(n>0)
+			{
+				str="yes";
+			}
+		}
+		return str;
+	}
 
 	@Override
 	public String reg(Userinfo userinfo)

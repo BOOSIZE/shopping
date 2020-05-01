@@ -26,6 +26,13 @@ public class UserController
 		return userServiceImpl.log(account, password, request);
 	}
 
+	@RequestMapping("addAdmin")
+	@ResponseBody
+	public String addAdmin(Userinfo userinfo)
+	{
+		return userServiceImpl.addAdmin(userinfo);
+	}
+
 	@RequestMapping("reg")
 	@ResponseBody
 	public String reg(Userinfo userinfo)

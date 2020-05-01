@@ -8,6 +8,8 @@ public interface UserService
 {
 	public abstract String reg(Userinfo userinfo);
 
+	public abstract String addAdmin(Userinfo userinfo);
+
 	public abstract String log(String account, String password, HttpServletRequest request);
 
 	public abstract String checkAccount(String account);
