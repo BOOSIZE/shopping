@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Update;
 import java.util.List;
 
 @Mapper
-public interface UserDao
+public interface UserMapper
 {
 	@Update("UPDATE USERINFO SET UTYPE=#{utype} WHERE UACCOUNT=#{uaccount}")
 	public abstract int updateUserType(String utype, String uaccount);
