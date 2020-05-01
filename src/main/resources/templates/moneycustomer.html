@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>资金管理</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+<br>
+<br>
+<form class="layui-form" action="" lay-filter="frm">
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">交易类型</label>
+        <div class="layui-input-inline">
+            <select name="ttype" id="ttype" lay-filter="ttype">
+                <option value="" selected=""></option>
+                <option value="充值">充值</option>
+                <option value="退款">退款</option>
+                <option value="购买商品">购买商品</option>
+            </select>
+        </div>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">搜索</button>
+        <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="chargeMoney">充值</button>
+    </div>
+</form>
+
+<div class="layui-form-item">
+    <label class="layui-form-label">总金额：</label>
+    <label class="layui-form-label" id="total" th:text="${session.user.getUmoney()}"></label>
+</div>
+
+<table id="test" lay-filter="test"></table>
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="buy">购买商品</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="add">加入购物车</a>
+</script>
+
+
+<script type="text/javascript" th:inline="none">
+
+	layui.use(['table', 'jquery'], function () {
+		var table = layui.table;
+		var $ = layui.jquery;
+
+		table.render({
+			elem: '#test'
+			, url: '/money/getList'
+			, title: '资金管理'
+			, limit: 7
+			, limits: ['7']
+			, page: true
+			, cols: [[
+				{field: 'ttime', title: '交易时间', align: 'center', width: 180, unresize: false}
+				, {field: 'ttype', title: '交易类型', align: 'center', width: 100, unresize: false}
+				, {field: 'tmoney', title: '交易金额', align: 'center', width: 130, unresize: false}
+			]]
+		});
+	});
+
+	//多条件查询
+	layui.use(['table', 'layer', 'form', 'laypage', 'laydate'], function () {
+		var table = layui.table //表格
+			, layer = layui.layer //弹层
+			, form = layui.form //form表单
+
+		//绑定的按钮是submit 监听提交 lay-filter="search"
+		form.on('submit(demo1)', function (data) {
+			var formData = data.field;
+			console.log(formData);
+
+			//执行重载
+			table.reload('test', {
+				page: {
+					curr: 1 //重新从第 1 页开始
+				}
+				, where: formData
+				, url: '/money/getList'//后台做模糊搜索接口路径
+				, method: 'post'
+			});
+			return false;//false：阻止表单跳转  true：表单跳转
+		});
+
+		form.on('submit(chargeMoney)', function (data) {
+			layer.prompt({title: '请输入充值金额'}, function (value, index, elem) {
+				var money = parseInt(value);
+				if (value % 1 === 0) {
+					if (money > 1000 || money < 1) {
+						layer.msg("请输入1-1000整数");
+					} else {
+						$.ajax({
+							type: "post"
+							, url: '/money/chargeMoney'
+							//预期服务器返回的数据类型;
+							, datatype: "text"
+							//从该js会发出到服务器的数据
+							, data: {"tmoney": value}
+							//从servlet接收的数据
+							, success: function (msg) {
+								if (msg === 1) {
+									layer.msg("充值成功！");
+									window.location.href="/go/to/moneycustomer";
+								} else {
+									layer.msg("充值失败！")
+								}
+							}
+							, error: function () {
+								alert("服务器正忙.....");
+							}
+						});
+						layer.close(index);
+					}
+				} else {
+					layer.msg("请输入1-100整数");
+				}
+			});
+			return false;//false：阻止表单跳转  true：表单跳转
+		});
+	});
+
+</script>
+
+</body>
+</html>

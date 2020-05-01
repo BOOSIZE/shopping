@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author Stephen
  */
-@Service()
+@Service
 public class GoodsServiceImpl implements GoodsService
 {
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shopping.dao.MoneyMapper">
+
+    <insert id="chargeMoney">
+        insert into traninfo(UACCOUNT, TTYPE, TMONEY, TTIME)
+        values (#{uaccount},'充值',#{tmoney},#{ttime})
+    </insert>
+
+    <select id="queryMoneyWithParamTotalNum" resultType="integer">
+        select count(*) from traninfo
+        <where>
+            <if test="uaccount !=null and uaccount!=''">
+                and uaccount = #{uaccount}
+            </if>
+            <if test="ttype !=null and ttype!=''">
+                and ttype = #{ttype}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryMoneyWithParam" parameterType="String" resultType="com.example.shopping.entity.Traninfo">
+        select * from traninfo
+        <where>
+            <if test="uaccount !=null and uaccount!=''">
+                and uaccount = #{uaccount}
+            </if>
+            <if test="ttype !=null and ttype!=''">
+                and ttype = #{ttype}
+            </if>
+        </where>
+        order by TTIME DESC limit ${statrNum},${limit}
+    </select>
+
+
+    <update id="updateNewsStatue">
+        update journalism set jstatue=#{statue} where jid=#{jid}
+    </update>
+
+    <update id="updatePrice">
+        update shopinfo set SMONEY=#{smoney} where SID=#{sid}
+    </update>
+
+    <delete id="deleteGoods" >
+        delete from shopinfo where SID = #{sid}
+    </delete>
+</mapper>
+	
