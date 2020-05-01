@@ -53,8 +53,8 @@
 			elem: '#test'
 			, url: '/money/getList'
 			, title: '资金管理'
-			, limit: 7
-			, limits: ['7']
+			, limit: 5
+			, limits: ['5']
 			, page: true
 			, cols: [[
 				{field: 'ttime', title: '交易时间', align: 'center', width: 180, unresize: false}
@@ -104,10 +104,10 @@
 							//从servlet接收的数据
 							, success: function (msg) {
 								if (msg === 1) {
-									layer.msg("充值成功！");
+									alert("充值成功！");
 									window.location.href="/go/to/moneycustomer";
 								} else {
-									layer.msg("充值失败！")
+									alert("充值失败！");
 								}
 							}
 							, error: function () {

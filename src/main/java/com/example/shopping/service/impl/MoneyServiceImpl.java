@@ -1,8 +1,7 @@
 package com.example.shopping.service.impl;
 
-import com.example.shopping.dao.GoodsMapper;
 import com.example.shopping.dao.MoneyMapper;
-import com.example.shopping.dao.UserDao;
+import com.example.shopping.dao.UserMapper;
 import com.example.shopping.entity.TableModel;
 import com.example.shopping.entity.Userinfo;
 import com.example.shopping.service.MoneyService;
@@ -28,7 +27,7 @@ public class MoneyServiceImpl implements MoneyService
 	private MoneyMapper moneyMapper;
 
 	@Autowired(required = false)
-	private UserDao userDao;
+	private UserMapper userMapper;
 
 	/**
 	 * @Description: 获取资金列表
@@ -60,9 +59,11 @@ public class MoneyServiceImpl implements MoneyService
 		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
 		String uaccount = user.getUaccount();
 
-		//当前用户充值完之后的余额，并更新
+		//当前用户充值完之后的余额，并更新session
 		String umoney = Integer.valueOf(user.getUmoney())+Integer.valueOf(tmoney)+"";
-		userDao.updateMoney(uaccount, umoney);
+		userMapper.updateMoney(uaccount, umoney);
+		Userinfo user1 = userMapper.getUser(uaccount);
+		request.getSession().setAttribute("user",user1);
 
 		return moneyMapper.chargeMoney(uaccount,tmoney,ttime);
 	}
