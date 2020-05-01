@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公告栏管理</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+<button class="layui-btn"  id="add" th:if="${session.user.urole=='1'}">新增公告</button>
+
+<table id="demo" lay-filter="test"></table>
+
+
+<script type="text/html" id="bar" th:if="${session.user.urole=='1'}">
+    <a class="layui-btn layui-btn-xs" lay-event="yes">移除</a>
+</script>
+<script>
+
+	layui.use(['table','form'], function() {
+		var table = layui.table;
+		var form=layui.form;
+		table.render({
+			elem: '#demo'
+			,url:"/gg/getList"
+			,page:true
+			,limit:10
+			,limits:[10]
+			,id:"testReload"
+			,cols: [
+				[
+					{field: 'uaccount', title: '发布账号', width:'15%'}
+					,{field: 'gtext', title: '公告内容', width:'40%'}
+					,{field: 'gtime', title: '发布时间', width:'15%'}
+					,{title:'操作',width:'20%',toolbar:"#bar"}
+				]
+			]
+		});
+
+
+		table.on('tool(test)', function(obj){
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event;
+			var tr = obj.tr;
+			layer.confirm('确定要移除该公告吗？', function(index)
+			{
+				$.ajax({
+					type:"POST",
+					url:"/gg/deleteGg",
+					data:{gid:data.gid},
+					success:function(msg)
+					{
+						if(msg==="yes")
+						{
+							layer.alert("移除成功", {icon: 1});
+							$(".layui-laypage-btn")[0].click();
+							layer.close(index);
+						}
+						else
+						{
+							layer.alert("修改失败，请稍后重试", {icon: 5});
+						}
+					},
+					error:function ()
+					{
+						layer.alert("服务器正忙.....", {icon: 5});
+					}
+				});
+			});
+		});
+
+		$('#add').click(function ()
+		{
+			layer.prompt({title:'请输入内容'},function(value, index, elem)
+			{
+				if(value.length>15)
+                {
+                	layer.alert("公告内容不得超过15字",{icon:5});
+                }
+				else
+                {
+	                $.ajax({
+		                type:"POST",
+		                url:"/gg/addGg",
+		                data:{text:value},
+		                success:function(msg)
+		                {
+			                if(msg==="yes")
+			                {
+				                layer.alert("新增成功", {icon: 1});
+				                $(".layui-laypage-btn")[0].click();
+				                layer.close(index);
+			                }
+			                else
+			                {
+				                layer.alert("新增失败，请稍后重试", {icon: 5});
+			                }
+		                },
+		                error:function ()
+		                {
+			                layer.alert("服务器正忙.....", {icon: 5});
+		                }
+	                });
+                }
+            });
+		});
+	});
+</script>
+</body>
+</html>

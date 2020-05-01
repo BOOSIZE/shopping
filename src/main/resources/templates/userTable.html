@@ -199,7 +199,7 @@
 
 		$('#add').click(function ()
         {
-	        layer.open({
+	       var dia= layer.open({
 		        type: 1,
 		        content: $('#msg').html(),
 		        area: ['500px','400px'],
@@ -248,16 +248,10 @@
 		                {
 			                if(msg==="yes")
 			                {
-				                layer.open({
-					                title: ['温馨提示'],
-					                content: '新增成功',
-					                btn: ['确定'],
-					                closeBtn :0,
-					                icon:'1',
-					                yes: function(){
-						                window.location.href="/go/to/userTable";
-					                }
-				                });
+				                layer.close(dia);
+				                layer.alert("新增成功", {icon: 1});
+				                $(".layui-laypage-btn")[0].click();
+				                layer.close(index);
 			                }
 			                else
 			                {
