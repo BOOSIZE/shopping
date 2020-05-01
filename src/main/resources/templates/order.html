@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+<div style="margin-top: 5%">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单状态：</label>
+            <div class="layui-input-inline">
+                <select name="ostatus" lay-verify="">
+                    <option value="">请选择订单状态</option>
+                    <option value="已下单">已下单</option>
+                    <option value="已退款">已退款</option>
+                    <option value="已完成">已完成</option>
+                    <option value="已评价">已评价</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">查询</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table id="demo" lay-filter="test" ></table>
+
+<input th:value="${session.user.urole}" id="urole" hidden="hidden">
+
+<script type="text/html" id="bar">
+    {{#  if(d.ostatus==='已下单'){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="yes" th:if="${session.user.urole == '1'}">确认</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no" th:if="${session.user.urole == '1'}">拒绝</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="cancel" th:if="${session.user.urole == '2'}">取消</a>
+    {{#  } }}
+    {{#  if(d.ostatus==='已完成'){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="no" th:if="${session.user.urole == '2'}">评价</a>
+    {{#  } }}
+    {{#  if(d.ostatus==='已评价'){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="no">查看评价</a>
+    {{#  } }}
+</script>
+<script type="text/html" id="account">
+    <a class="layui-btn layui-btn-xs" lay-event="yes" th:if="${session.user.urole == '1'}">确认</a>
+</script>
+<script>
+
+
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+
+        form.on('submit(formDemo)', function (data) {
+
+            table.reload('testReload',
+                {
+                    page:
+                        {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                    , where:
+                        {
+                            ostatus: data.field.ostatus
+                        }
+                });
+            return false;
+        });
+
+        table.render({
+            elem: '#demo'
+            , url: "/order/getList"
+            , page: true
+            , limit: 10
+            , limits: [10]
+            , id: "testReload"
+            , cols: [
+                [
+                {field: 'uaccount', title: '用户账号', width: '20%', align: 'center'}
+                , {field: 'oname', title: '商品名', width: '15%', align: 'center'}
+                , {field: 'ocount', title: '购买数量', width: '10%', align: 'center'}
+                , {field: 'omoney', title: '订单金额', width: '10%', align: 'center'}
+                , {field: 'ostatus', title: '订单状态', width: '10%', align: 'center'}
+                , {field: 'otime', title: '订单时间', width: '20%', align: 'center'}
+                , {title: '操作', width: '15%', toolbar: "#bar", align: 'center'}
+            ]
+            ]
+           , done: function(res, curr, count){
+                if($('#urole').val() == '2') {//此处test为你的条件值
+                    $("[data-field='uaccount']").css('display', 'none'); //关键代码
+                }
+            }
+        });
+
+
+        table.on('tool(test)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event;
+            var tr = obj.tr;
+
+
+            if (layEvent === 'yes' || layEvent === 'on' || layEvent === 'cancel') {
+
+            } else {
+
+            }
+        });
+
+
+    })
+    ;
+</script>
+</body>
+</html>
