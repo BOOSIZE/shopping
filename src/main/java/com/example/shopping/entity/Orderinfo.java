@@ -10,7 +10,33 @@ public class Orderinfo {
   private String omoney;
   private String otime;
   private String uaccount;
+  private String ostatus;
+  private String oevaluation;
+  private String oevtime;
 
+  public String getOstatus() {
+    return ostatus;
+  }
+
+  public void setOstatus(String ostatus) {
+    this.ostatus = ostatus;
+  }
+
+  public String getOevaluation() {
+    return oevaluation;
+  }
+
+  public void setOevaluation(String oevaluation) {
+    this.oevaluation = oevaluation;
+  }
+
+  public String getOevtime() {
+    return oevtime;
+  }
+
+  public void setOevtime(String oevtime) {
+    this.oevtime = oevtime;
+  }
 
   public Long getOid() {
     return oid;
