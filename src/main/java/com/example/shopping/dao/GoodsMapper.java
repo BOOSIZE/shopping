@@ -89,5 +89,13 @@ public interface GoodsMapper
 	 * @Param [sid, scount]
 	 * @return int
 	 **/
-	int updateSole(String sid,String scount);
+	int updateCount(String sid,String scount);
+
+	/**
+	 * @Description: 更新销量
+	 * @Param [sid, ssole]
+	 * @return int
+	 **/
+	int updateSole(String sid,String ssole);
+
 }

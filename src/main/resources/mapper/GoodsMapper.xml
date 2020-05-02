@@ -67,8 +67,12 @@
         delete from shopinfo where SID = #{sid}
     </delete>
 
-    <update id="updateSole">
+    <update id="updateCount">
         update shopinfo set SCOUNT=#{scount} where SID=#{sid}
+    </update>
+
+    <update id="updateSole">
+        update shopinfo set SSOLE=#{ssole} where SID=#{sid}
     </update>
 </mapper>
 	

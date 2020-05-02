@@ -158,11 +158,10 @@ public class GoodsServiceImpl implements GoodsService
 			//添加交易记录
 			moneyMapper.chargeMoney(uaccount,total,ttime,"购买商品");
 
-			//更新该产品销量
+			//更新该产品库存
 			Shopinfo shopinfo = goodsMapper.querySingleGoods(sid);
-			String ssole = Integer.valueOf(shopinfo.getSsole())+Integer.valueOf(num)+"";
 			String scount = Integer.valueOf(shopinfo.getScount())-Integer.valueOf(num)+"";
-			int k = goodsMapper.updateSole(sid, scount);
+			int k = goodsMapper.updateCount(sid, scount);
 			return 1;
 
 		}else {
