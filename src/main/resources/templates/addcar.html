@@ -98,30 +98,6 @@
 			, min: now
 		});
 
-		//自定义验证规则
-		form.verify({
-			smoney: function (value) {
-				//判断是否为整数
-				if (value % 1 === 0) {
-					//判断范围是否在1-100之间
-					if (value > 100 || value < 1) {
-						return '请输入1-100的整数';
-					}
-				} else {
-					return '请输入1-100的整数';
-				}
-			},
-			scount: function (value) {
-				if (value % 1 === 0) {
-					if (value < 1) {
-						return '请输入大于1的整数';
-					}
-				} else {
-					return '请输入大于1的整数';
-				}
-			}
-		});
-
 		form.on("select", function(data){
 
 			var num = parseInt(data.value);
@@ -156,7 +132,6 @@
 				,
 				data: {
 					"total": total,
-					"price": price,
 					"num": num,
 					"oname": oname,
 					"sid": sid
@@ -164,11 +139,11 @@
 				//从servlet接收的数据
 				,
 				success: function (msg) {
-					if (msg === "1") {
-						layer.msg("新增成功！");
+					if (msg === 1) {
+						alert("添加购物车成功！");
 						parent.location.reload();
 					} else {
-						layer.msg("新增失败！")
+						alert("添加购物车失败！");
 					}
 				},
 				error: function () {

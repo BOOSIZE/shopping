@@ -1,13 +1,7 @@
 package com.example.shopping.service.impl;
 
-import com.example.shopping.dao.GoodsMapper;
-import com.example.shopping.dao.MoneyMapper;
-import com.example.shopping.dao.OrderMapper;
-import com.example.shopping.dao.UserMapper;
-import com.example.shopping.entity.Orderinfo;
-import com.example.shopping.entity.Shopinfo;
-import com.example.shopping.entity.TableModel;
-import com.example.shopping.entity.Userinfo;
+import com.example.shopping.dao.*;
+import com.example.shopping.entity.*;
 import com.example.shopping.service.GoodsService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +34,9 @@ public class GoodsServiceImpl implements GoodsService
 
 	@Autowired(required = false)
 	private MoneyMapper moneyMapper;
+
+	@Autowired(required = false)
+	private CarMapper carMapper;
 
 	@Override
 	public String getList(String sname, Integer page, Integer limit)
@@ -173,6 +170,11 @@ public class GoodsServiceImpl implements GoodsService
 		}
 	}
 
+	/**
+	 * @Description: 插入购物车
+	 * @Param [sid, oname, total, num, request]
+	 * @return int
+	 **/
 	@Override
 	public int addCar(String sid, String oname, String total, String num, HttpServletRequest request)
 	{
@@ -184,8 +186,14 @@ public class GoodsServiceImpl implements GoodsService
 		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
 		String uaccount = user.getUaccount();
 
-
-
-		return 0;
+		//插入购物车操作
+		Carinfo carinfo = new Carinfo();
+		carinfo.setSid(Long.valueOf(sid));
+		carinfo.setCcount(num);
+		carinfo.setCmoney(total);
+		carinfo.setCname(oname);
+		carinfo.setCtime(ttime);
+		carinfo.setUaccount(uaccount);
+		return carMapper.addCar(carinfo);
 	}
 }

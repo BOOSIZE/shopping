@@ -91,14 +91,19 @@ public class GoodsController
 	 **/
 	@RequestMapping("buyGoods")
 	@ResponseBody
-	public int buyGoods(String sid, String total, String price, String num,String oname,HttpServletRequest request){
+	public int buyGoods(String sid, String total, String num,String oname,HttpServletRequest request){
 		return goodsServiceImpl.buyGoods(sid,oname,total,num,request);
 	}
 
 
+	/**
+	 * @Description: 添加购物车
+	 * @Param [sid, total, num, oname, request]
+	 * @return int
+	 **/
 	@RequestMapping("addCar")
 	@ResponseBody
-	public int addCar(String sid, String total, String price, String num,String oname,HttpServletRequest request){
-		return goodsServiceImpl.buyGoods(sid,oname,total,num,request);
+	public int addCar(String sid, String total, String num,String oname,HttpServletRequest request){
+		return goodsServiceImpl.addCar(sid,oname,total,num,request);
 	}
 }
