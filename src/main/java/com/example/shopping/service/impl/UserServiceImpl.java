@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService
 		if(userinfo2==null)
 		{
 			userinfo.setUrole(1+"");
-			userinfo.setUregtime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+			userinfo.setUregtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			int n=userMapper.reg(userinfo);
 			if(n>0)
 			{
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService
 	public String reg(Userinfo userinfo)
 	{
 		String str="no";
-		userinfo.setUregtime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		userinfo.setUregtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		userinfo.setUrole(2+"");
 		int n=userMapper.reg(userinfo);
 		if(n>0)

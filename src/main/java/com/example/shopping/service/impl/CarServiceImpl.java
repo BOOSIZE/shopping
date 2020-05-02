@@ -81,7 +81,7 @@ public class CarServiceImpl implements CarService
 						{
 							str="yes";
 							userMapper.updateMoney(userinfo.getUaccount(),Integer.valueOf(userinfo.getUmoney())-cmoney+"");
-							goodsMapper.updateSole(sid+"",Integer.valueOf(shopinfo.getScount())-ccount+"");
+							goodsMapper.updateCount(sid+"",Integer.valueOf(shopinfo.getScount())-ccount+"");
 							moneyMapper.chargeMoney(userinfo.getUaccount(),cmoney+"",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),"购买商品");
 							Orderinfo orderinfo=new Orderinfo();
 							orderinfo.setSid(sid);

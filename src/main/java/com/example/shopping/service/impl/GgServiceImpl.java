@@ -52,7 +52,7 @@ public class GgServiceImpl implements GgService
 		String str="no";
 		Gginfo gginfo=new Gginfo();
 		Userinfo userinfo=(Userinfo) request.getSession().getAttribute("user");
-		gginfo.setGtime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		gginfo.setGtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		gginfo.setGtext(text);
 		gginfo.setUaccount(userinfo.getUaccount());
 		int n=ggMapper.addGg(gginfo);
