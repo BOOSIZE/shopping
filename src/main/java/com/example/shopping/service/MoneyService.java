@@ -23,5 +23,5 @@ public interface MoneyService
 	 * @param
 	 * @return
 	 */
-	int chargeMoney(String tmoney, HttpServletRequest request);
+	int chargeMoney(String tmoney,String ttype, HttpServletRequest request);
 }

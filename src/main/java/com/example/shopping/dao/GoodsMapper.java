@@ -19,11 +19,11 @@ public interface GoodsMapper
 	public int queryNewsTotalNum();
 
 	/**
-	 * 查询单个
-	 * @param jid
+	 * 查询单个商品信息
+	 * @param sid
 	 * @return
 	 */
-	public Shopinfo querySingleNews(int jid);
+	public Shopinfo querySingleGoods(String sid);
 
 	/**
 	 * @Description:
@@ -82,4 +82,12 @@ public interface GoodsMapper
 	 * @return int
 	 **/
 	int updatePrice(String sid,String smoney);
+
+
+	/**
+	 * @Description: 更新销量和库存
+	 * @Param [sid, scount]
+	 * @return int
+	 **/
+	int updateSole(String sid,String ssole,String scount);
 }

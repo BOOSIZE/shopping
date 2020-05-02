@@ -36,11 +36,11 @@ public interface MoneyMapper
 	public int updateNewsStatue(Map<String, String> map);
 
 	/**
-	 * 充值
+	 * 添加交易记录
 	 * @param
 	 * @return
 	 */
-	int chargeMoney(String uaccount, String tmoney, String ttime);
+	int chargeMoney(String uaccount, String tmoney, String ttime,String ttype);
 
 	/**
 	 * @Description: 删除商品

@@ -49,7 +49,7 @@ public class MoneyServiceImpl implements MoneyService
 	}
 
 	@Override
-	public int chargeMoney(String tmoney, HttpServletRequest request)
+	public int chargeMoney(String tmoney, String ttype,HttpServletRequest request)
 	{
 		//获取当前时间
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -65,6 +65,6 @@ public class MoneyServiceImpl implements MoneyService
 		Userinfo user1 = userMapper.getUser(uaccount);
 		request.getSession().setAttribute("user",user1);
 
-		return moneyMapper.chargeMoney(uaccount,tmoney,ttime);
+		return moneyMapper.chargeMoney(uaccount,tmoney,ttime,ttype);
 	}
 }

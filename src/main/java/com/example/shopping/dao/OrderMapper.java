@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface OrderMapper {
 
-    @Insert("inser into orderinfo(sid,oname,ocount,omoney,otime,uaccount) values (#{sid},#{oname},#{ocount},#{omoney},#{otime},#{uaccount})")
+    @Insert("insert into orderinfo(sid,oname,ocount,omoney,otime,uaccount) values (#{sid},#{oname},#{ocount},#{omoney},#{otime},#{uaccount})")
     int addOrder(Orderinfo orderinfo);
 
     @Select("<script> SELECT COUNT(*) FROM orderinfo WHERE 1=1" +

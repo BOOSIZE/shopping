@@ -51,8 +51,8 @@
         order by SENDTIME limit ${statrNum},${limit}
     </select>
 
-    <select id="querySingleNews" resultType="com.example.shopping.entity.Shopinfo">
-        select * from journalism where jid = ${jid};
+    <select id="querySingleGoods" resultType="com.example.shopping.entity.Shopinfo">
+        select * from shopinfo where sid = ${sid};
     </select>
 
     <update id="updateNewsStatue">
@@ -66,5 +66,9 @@
     <delete id="deleteGoods" >
         delete from shopinfo where SID = #{sid}
     </delete>
+
+    <update id="updateSole">
+        update shopinfo set SSOLE=#{ssole},SCOUNT=#{scount} where SID=#{sid}
+    </update>
 </mapper>
 	

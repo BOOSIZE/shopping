@@ -3,8 +3,8 @@
 <mapper namespace="com.example.shopping.dao.MoneyMapper">
 
     <insert id="chargeMoney">
-        insert into traninfo(UACCOUNT, TTYPE, TMONEY, TTIME)
-        values (#{uaccount},'充值',#{tmoney},#{ttime})
+        insert into traninfo(UACCOUNT,TTYPE, TMONEY, TTIME)
+        values (#{uaccount},#{ttype},#{tmoney},#{ttime})
     </insert>
 
     <select id="queryMoneyWithParamTotalNum" resultType="integer">

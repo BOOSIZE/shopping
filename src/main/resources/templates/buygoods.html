@@ -65,11 +65,13 @@
 
 <script>
     var sid;
+    var scount;
 
 	function selectinfo(data) {
 		$("#sname").val(data.sname);
 		$("#smoney").val(data.smoney);
 		sid = data.sid;
+		scount = data.scount;
 	}
 
 	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
@@ -114,37 +116,43 @@
 			var total = parseInt(price)*parseInt(num);
 			var oname = $("#sname").val();
 			var umoney = parseInt($("#umoney").val());
+			var changecount = parseInt(scount);
 
 			if(umoney>total){
-				$.ajax({
-					type: "post"
-					,
-					url: '/goods/buyGoods'
-					//预期服务器返回的数据类型;
-					,
-					datatype: "text"
-					//从该js会发出到服务器的数据
-					,
-					data: {
-						"total": total,
-						"price": price,
-						"num": num,
-                        "oname":oname,
-						"sid":sid
-					}
-					//从servlet接收的数据
-					,
-					success: function (msg) {
-						if (msg === 1) {
-							layer.msg("支付成功！");
-						} else {
-							layer.msg("支付失败！")
-						}
-					},
-					error: function () {
-						alert("服务器正忙.....");
-					}
-				});
+                if(changecount>=parseInt(num)){
+	                $.ajax({
+		                type: "post"
+		                ,
+		                url: '/goods/buyGoods'
+		                //预期服务器返回的数据类型;
+		                ,
+		                datatype: "text"
+		                //从该js会发出到服务器的数据
+		                ,
+		                data: {
+			                "total": total,
+			                "price": price,
+			                "num": num,
+			                "oname":oname,
+			                "sid":sid
+		                }
+		                //从servlet接收的数据
+		                ,
+		                success: function (msg) {
+			                if (msg === 1) {
+			                	alert("支付成功！");
+				                parent.location.reload();
+			                } else {
+				                alert("支付失败！");
+			                }
+		                },
+		                error: function () {
+			                alert("服务器正忙.....");
+		                }
+	                });
+                }else {
+	                alert("库存不足，请修改数量");
+                }
             }else {
                 alert("余额不足，请充值");
             }

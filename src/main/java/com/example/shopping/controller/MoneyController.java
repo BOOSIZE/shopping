@@ -46,9 +46,9 @@ public class MoneyController
 	 **/
 	@RequestMapping("chargeMoney")
 	@ResponseBody
-	public int insertGoods(String tmoney,String scount,String sendtime,HttpServletRequest request){
+	public int insertGoods(String tmoney,String ttype,HttpServletRequest request){
 
 		//返回充值消息
-		return moneyServiceImpl.chargeMoney(tmoney,request);
+		return moneyServiceImpl.chargeMoney(tmoney,ttype,request);
 	}
 }

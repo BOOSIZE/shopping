@@ -1,6 +1,7 @@
 package com.example.shopping.service.impl;
 
 import com.example.shopping.dao.GoodsMapper;
+import com.example.shopping.dao.MoneyMapper;
 import com.example.shopping.dao.OrderMapper;
 import com.example.shopping.dao.UserMapper;
 import com.example.shopping.entity.Orderinfo;
@@ -36,6 +37,9 @@ public class GoodsServiceImpl implements GoodsService
 
 	@Autowired(required = false)
 	private OrderMapper orderMapper;
+
+	@Autowired(required = false)
+	private MoneyMapper moneyMapper;
 
 	@Override
 	public String getList(String sname, Integer page, Integer limit)
@@ -150,11 +154,15 @@ public class GoodsServiceImpl implements GoodsService
 		Userinfo user1 = userMapper.getUser(uaccount);
 		request.getSession().setAttribute("user",user1);
 
-		int r = 0;
+		//添加交易记录
+		moneyMapper.chargeMoney(uaccount,total,ttime,"购买商品");
 
-		if(i==1&&j==1){
-			r=1;
-		}
-		return r;
+		//更新该产品销量
+		Shopinfo shopinfo = goodsMapper.querySingleGoods(sid);
+		String ssole = Integer.valueOf(shopinfo.getSsole())+Integer.valueOf(num)+"";
+		String scount = Integer.valueOf(shopinfo.getScount())-Integer.valueOf(num)+"";
+		int k = goodsMapper.updateSole(sid, ssole,scount);
+
+		return 1;
 	}
 }
