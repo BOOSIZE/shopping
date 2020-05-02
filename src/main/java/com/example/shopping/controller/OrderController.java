@@ -1,5 +1,6 @@
 package com.example.shopping.controller;
 
+import com.example.shopping.entity.Orderinfo;
 import com.example.shopping.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,4 +23,21 @@ public class OrderController {
         return orderService.getList(page,limit,ostatus,session);
     }
 
+
+
+
+    @RequestMapping("changestatus")
+    @ResponseBody
+    public String changestatus(Orderinfo orderinfo)
+    {
+        return orderService.changestatus(orderinfo);
+    }
+
+
+    @RequestMapping("changeOrder")
+    @ResponseBody
+    public String changeOrder(Orderinfo orderinfo)
+    {
+        return orderService.changeOrder(orderinfo);
+    }
 }

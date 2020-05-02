@@ -5,6 +5,7 @@ import com.example.shopping.entity.Orderinfo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -24,4 +25,10 @@ public interface OrderMapper {
             "<when test='uaccount!=null'> AND uaccount =#{uaccount}</when>"+
             "ORDER BY otime desc LIMIT #{limit} OFFSET #{end}  </script>")
     List<Orderinfo> getList(Integer limit, int end, String ostatus, String uaccount);
+
+    @Update("update orderinfo set ostatus = #{ostatus} where oid = #{oid}")
+    int changestatus(Orderinfo orderinfo);
+
+    @Update("update orderinfo set oevaluation = #{oevaluation},oevtime = #{oevtime},ostatus = #{ostatus} where oid = #{oid}")
+    int changeOrder(Orderinfo orderinfo);
 }

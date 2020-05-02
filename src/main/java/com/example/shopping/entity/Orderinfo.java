@@ -13,6 +13,15 @@ public class Orderinfo {
   private String ostatus;
   private String oevaluation;
   private String oevtime;
+  private String msg;
+
+  public String getMsg() {
+    return msg;
+  }
+
+  public void setMsg(String msg) {
+    this.msg = msg;
+  }
 
   public String getOstatus() {
     return ostatus;

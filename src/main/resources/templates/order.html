@@ -28,7 +28,7 @@
     </form>
 </div>
 
-<table id="demo" lay-filter="test" ></table>
+<table id="demo" lay-filter="test"></table>
 
 <input th:value="${session.user.urole}" id="urole" hidden="hidden">
 
@@ -39,14 +39,43 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="cancel" th:if="${session.user.urole == '2'}">取消</a>
     {{#  } }}
     {{#  if(d.ostatus==='已完成'){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="no" th:if="${session.user.urole == '2'}">评价</a>
+    <a class="layui-btn layui-btn-xs" lay-event="evaluation" th:if="${session.user.urole == '2'}">评价</a>
     {{#  } }}
     {{#  if(d.ostatus==='已评价'){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="no">查看评价</a>
+    <a class="layui-btn layui-btn-xs" lay-event="see">查看评价</a>
     {{#  } }}
 </script>
 <script type="text/html" id="account">
     <a class="layui-btn layui-btn-xs" lay-event="yes" th:if="${session.user.urole == '1'}">确认</a>
+</script>
+<script type="text/html" id="eva">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">评价订单：</label>
+            <div class="layui-input-inline">
+                <textarea name="oevaluation" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="goeva">提交评价</button>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="seeeva">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">评价内容：</label>
+            <div class="layui-input-inline">
+                <textarea id="oevaluation" class="layui-textarea" disabled></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">评价时间：</label>
+            <div class="layui-input-inline">
+                <input type="text" id="oevtime" class="layui-input" disabled>
+            </div>
+        </div>
+    </form>
 </script>
 <script>
 
@@ -80,17 +109,17 @@
             , id: "testReload"
             , cols: [
                 [
-                {field: 'uaccount', title: '用户账号', width: '20%', align: 'center'}
-                , {field: 'oname', title: '商品名', width: '15%', align: 'center'}
-                , {field: 'ocount', title: '购买数量', width: '10%', align: 'center'}
-                , {field: 'omoney', title: '订单金额', width: '10%', align: 'center'}
-                , {field: 'ostatus', title: '订单状态', width: '10%', align: 'center'}
-                , {field: 'otime', title: '订单时间', width: '20%', align: 'center'}
-                , {title: '操作', width: '15%', toolbar: "#bar", align: 'center'}
+                    {field: 'uaccount', title: '用户账号', width: '20%', align: 'center'}
+                    , {field: 'oname', title: '商品名', width: '15%', align: 'center'}
+                    , {field: 'ocount', title: '购买数量', width: '10%', align: 'center'}
+                    , {field: 'omoney', title: '订单金额', width: '10%', align: 'center'}
+                    , {field: 'ostatus', title: '订单状态', width: '10%', align: 'center'}
+                    , {field: 'otime', title: '订单时间', width: '20%', align: 'center'}
+                    , {title: '操作', width: '15%', toolbar: "#bar", align: 'center'}
+                ]
             ]
-            ]
-           , done: function(res, curr, count){
-                if($('#urole').val() == '2') {//此处test为你的条件值
+            , done: function (res, curr, count) {
+                if ($('#urole').val() == '2') {//此处test为你的条件值
                     $("[data-field='uaccount']").css('display', 'none'); //关键代码
                 }
             }
@@ -103,10 +132,86 @@
             var tr = obj.tr;
 
 
-            if (layEvent === 'yes' || layEvent === 'on' || layEvent === 'cancel') {
+            if (layEvent === 'yes' || layEvent === 'no' || layEvent === 'cancel') {
+                let msg = '';
+                if (layEvent === 'yes') {
+                    msg = '确认';
+                } else if (layEvent === 'no') {
+                    msg = '拒绝';
+                } else if (layEvent === 'cancel') {
+                    msg = '取消';
+                }
+                data.msg = layEvent;
+                layer.confirm('确定要' + msg + "这个订单吗？", function (index) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/order/changestatus',
+                        data: data,
+                        dataType: "text",
+                        success: function (result) {
+                            if (result === 'true') {
+                                layer.closeAll();
+                                layer.alert(msg + '成功', {icon: 1});
+                                $(".layui-laypage-btn")[0].click();
+                                layer.close(index);
+                            } else {
+                                layer.alert('修改失败', {icon: 5});
+                            }
+                        },
+                        error: function (msg) {
+                            layer.alert('服务器正忙', {icon: 5});
+                        }
+                    })
 
-            } else {
+                });
+            } else if (layEvent == 'evaluation') {
 
+                layer.open({
+                    type: 1,
+                    content: $('#eva').html(),
+                    area: ['600px', '200px'],
+                    title: '评价'
+                });
+                var data1 = data;
+                form.on('submit(goeva)', function (data) {
+                    if (data.field.oevaluation.length > 0 && data.field.oevaluation.length < 100) {
+
+                        data1.oevaluation = data.field.oevaluation;
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/order/changeOrder',
+                            data: data1,
+                            dataType: "text",
+                            success: function (result) {
+                                if (result === 'true') {
+                                    layer.closeAll();
+                                    layer.alert('评价成功', {icon: 1});
+                                    $(".layui-laypage-btn")[0].click();
+                                } else {
+                                    layer.alert('评价失败', {icon: 5});
+                                }
+                            },
+                            error: function (msg) {
+                                layer.alert('服务器正忙', {icon: 5});
+                            }
+                        })
+                    } else {
+                        layer.msg('请评价且字数少于100');
+                    }
+                    return false;
+
+                });
+
+            }else if (layEvent === 'see'){
+                layer.open({
+                    type: 1,
+                    content: $('#seeeva').html(),
+                    area: ['400px', '240px'],
+                    title: '查看评价'
+                });
+                $('#oevaluation').val(data.oevaluation);
+                $('#oevtime').val(data.oevtime);
             }
         });
 
