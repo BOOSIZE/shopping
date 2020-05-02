@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的购物车</title>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <script th:src="@{/js/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-3.4.1.js}"></script>
+</head>
+<body>
+<div class="demoTable">
+    商品名:<input type="text" id="cname" >
+    <button class="layui-btn" data-type="reload" id="cx">查询</button>
+</div>
+<table id="demo" lay-filter="test"></table>
+
+
+<script type="text/html" id="bar" >
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="no">移除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="yes">购买</a>
+</script>
+<script>
+
+	layui.use(['table','form'], function() {
+		var table = layui.table;
+		var form=layui.form;
+		table.render({
+			elem: '#demo'
+			,url:"/car/getList"
+			,page:true
+			,limit:10
+			,limits:[10]
+			,id:"testReload"
+			,cols: [
+				[
+					{field: 'cname', title: '商品名', width:'20%'}
+					,{field: 'ccount', title: '数量', width:'20%'}
+					,{field: 'cmoney', title: '总金额', width:'20%'}
+					,{field: 'ctime', title: '添加时间', width:'20%'}
+					,{field:"aa",title:'操作',width:'20%',toolbar:"#bar"}
+				]
+			]
+		});
+
+
+		$('#cx').click(function () {
+			table.reload('testReload',
+				{
+					page:
+						{
+							curr: 1 //重新从第 1 页开始
+						}
+					, where:
+						{
+							cname: $("#cname").val()
+
+						}
+				});
+		});
+
+		table.on('tool(test)', function(obj){
+			var data = obj.data; //获得当前行数据
+			var layEvent = obj.event;
+			var tr = obj.tr;
+			if(layEvent==="no")
+            {
+	            layer.confirm('确定要移除该商品吗？', function(index)
+	            {
+		            $.ajax({
+			            type:"POST",
+			            url:"/car/deleteCar",
+			            data:{cid:data.cid},
+			            success:function(msg)
+			            {
+				            if(msg==="yes")
+				            {
+					            layer.alert("移除成功", {icon: 1});
+					            $(".layui-laypage-btn")[0].click();
+					            layer.close(index);
+				            }
+				            else
+				            {
+					            layer.alert("移除失败，请稍后重试", {icon: 5});
+				            }
+			            },
+			            error:function ()
+			            {
+				            layer.alert("服务器正忙.....", {icon: 5});
+			            }
+		            });
+	            });
+            }
+			else {
+				layer.confirm('确定要花费'+data.cmoney+'元购买'+data.cname+'吗？', function(index)
+				{
+					$.ajax({
+						type:"POST",
+						url:"/car/buy",
+						data:{sid:data.sid,cname:data.cname,ccount:data.ccount,cmoney:data.cmoney},
+						success:function(msg)
+						{
+							if(msg==="no")
+                            {
+	                            layer.alert("该商品已下架", {icon: 5});
+                            }
+							else if(msg==="money")
+                            {
+	                            layer.alert("该商品单价已修改", {icon: 5});
+                            }
+							else if(msg==="time")
+							{
+								layer.alert("该商品已过期", {icon: 5});
+							}
+							else if(msg==="count")
+							{
+								layer.alert("该商品剩余数量不足", {icon: 5});
+							}
+							else if(msg==="nomoney")
+							{
+								layer.alert("您的余额不足,请先充值", {icon: 5});
+							}
+							else
+							{
+								layer.alert("购买成功", {icon: 1});
+								$(".layui-laypage-btn")[0].click();
+								layer.close(index);
+							}
+						},
+						error:function ()
+						{
+							layer.alert("服务器正忙.....", {icon: 5});
+						}
+					});
+				});
+            }
+		});
+	});
+</script>
+</body>
+</html>
