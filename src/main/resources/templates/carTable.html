@@ -96,7 +96,7 @@
 					$.ajax({
 						type:"POST",
 						url:"/car/buy",
-						data:{sid:data.sid,cname:data.cname,ccount:data.ccount,cmoney:data.cmoney},
+						data:{sid:data.sid,cid:data.cid,cname:data.cname,ccount:data.ccount,cmoney:data.cmoney},
 						success:function(msg)
 						{
 							if(msg==="no")

@@ -1,6 +1,7 @@
 package com.example.shopping.service.impl;
 
 import com.example.shopping.dao.*;
+import com.example.shopping.entity.Orderinfo;
 import com.example.shopping.entity.Shopinfo;
 import com.example.shopping.entity.TableModel;
 import com.example.shopping.entity.Userinfo;
@@ -55,7 +56,7 @@ public class CarServiceImpl implements CarService
 	}
 
 	@Override
-	public String buy(HttpServletRequest request, Long sid, String cname, Integer ccount, Integer cmoney)
+	public String buy(HttpServletRequest request, Long sid,Long cid, String cname, Integer ccount, Integer cmoney)
 	{
 		String str="no";
 		Shopinfo shopinfo=goodsMapper.querySingleGoods(sid+"");
@@ -68,7 +69,7 @@ public class CarServiceImpl implements CarService
 			{
 				str="time";
 				String today=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-				if(today.compareTo(shopinfo.getSendtime())>0)
+				if(today.compareTo(shopinfo.getSendtime())<0)
 				{
 					str="count";
 					int count=Integer.valueOf(shopinfo.getScount());
@@ -79,7 +80,19 @@ public class CarServiceImpl implements CarService
 						if(Integer.valueOf(userinfo.getUmoney())>=cmoney)
 						{
 							str="yes";
+							userMapper.updateMoney(userinfo.getUaccount(),Integer.valueOf(userinfo.getUmoney())-cmoney+"");
+							goodsMapper.updateSole(sid+"",Integer.valueOf(shopinfo.getScount())-ccount+"");
+							moneyMapper.chargeMoney(userinfo.getUaccount(),cmoney+"",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),"购买商品");
+							Orderinfo orderinfo=new Orderinfo();
+							orderinfo.setSid(sid);
+							orderinfo.setOname(cname);
+							orderinfo.setOtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+							orderinfo.setOcount(ccount+"");
+							orderinfo.setOmoney(cmoney+"");
+							orderinfo.setUaccount(userinfo.getUaccount());
+							orderMapper.addOrder(orderinfo);
 
+							carMapper.deleteCar(cid);
 						}
 					}
 				}

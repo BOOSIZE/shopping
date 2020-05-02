@@ -8,6 +8,6 @@ public interface CarService
 
 	public abstract String deleteCar(Long cid);
 
-	public abstract String buy(HttpServletRequest request,Long sid,String cname,Integer ccount,Integer cmoney);
+	public abstract String buy(HttpServletRequest request,Long sid,Long cid,String cname,Integer ccount,Integer cmoney);
 
 }

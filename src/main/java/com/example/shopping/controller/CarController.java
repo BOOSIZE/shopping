@@ -24,9 +24,9 @@ public class CarController
 
 	@RequestMapping("buy")
 	@ResponseBody
-	public String buy(HttpServletRequest request, Long sid, String cname, Integer ccount, Integer cmoney)
+	public String buy(HttpServletRequest request, Long sid, Long cid,String cname, Integer ccount, Integer cmoney)
 	{
-		return carServiceImpl.buy(request, sid, cname, ccount, cmoney);
+		return carServiceImpl.buy(request, sid,cid, cname, ccount, cmoney);
 	}
 
 	@RequestMapping("deleteCar")
