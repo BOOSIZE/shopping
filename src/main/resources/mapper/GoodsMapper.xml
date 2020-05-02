@@ -68,7 +68,7 @@
     </delete>
 
     <update id="updateSole">
-        update shopinfo set SSOLE=#{ssole},SCOUNT=#{scount} where SID=#{sid}
+        update shopinfo set SCOUNT=#{scount} where SID=#{sid}
     </update>
 </mapper>
 	

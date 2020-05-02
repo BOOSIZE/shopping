@@ -18,7 +18,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品名</label>
             <div class="layui-input-inline">
-                <input type="text" id="sname" name="sname" lay-verify="required" disabled="disabled" autocomplete="off" class="layui-input"
+                <input type="text" id="sname" name="sname" lay-verify="required" disabled="disabled" autocomplete="off"
+                       class="layui-input"
                        placeholder="请输入商品名称">
             </div>
         </div>
@@ -26,7 +27,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品单价</label>
             <div class="layui-input-inline">
-                <input type="number" id="smoney" name="smoney" lay-verify="smoney" disabled="disabled" autocomplete="off"
+                <input type="number" id="smoney" name="smoney" lay-verify="smoney" disabled="disabled"
+                       autocomplete="off"
                        class="layui-input"
                        placeholder="请输入商品单价">
             </div>
@@ -36,7 +38,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">购买数量</label>
             <div class="layui-input-inline">
-                <select name="buynum" id="buynum" lay-filter="buynum" >
+                <select name="buynum" id="buynum" lay-filter="buynum">
                     <option value="" selected=""></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -64,8 +66,8 @@
 </div>
 
 <script>
-    var sid;
-    var scount;
+	var sid;
+	var scount;
 
 	function selectinfo(data) {
 		$("#sname").val(data.sname);
@@ -101,10 +103,10 @@
 			, min: now
 		});
 
-		form.on("select", function(data){
+		form.on("select", function (data) {
 			var num = parseInt(data.value);
 			var price = parseInt($("#smoney").val());
-			var totalPrice = num*price;
+			var totalPrice = num * price;
 			$("#total").text(totalPrice);
 		});
 
@@ -113,49 +115,47 @@
 			var formData = data.field;
 			var price = formData.smoney;
 			var num = formData.buynum;
-			var total = parseInt(price)*parseInt(num);
+			var total = parseInt(price) * parseInt(num);
 			var oname = $("#sname").val();
 			var umoney = parseInt($("#umoney").val());
 			var changecount = parseInt(scount);
 
-			if(umoney>total){
-                if(changecount>=parseInt(num)){
-	                $.ajax({
-		                type: "post"
-		                ,
-		                url: '/goods/buyGoods'
-		                //预期服务器返回的数据类型;
-		                ,
-		                datatype: "text"
-		                //从该js会发出到服务器的数据
-		                ,
-		                data: {
-			                "total": total,
-			                "price": price,
-			                "num": num,
-			                "oname":oname,
-			                "sid":sid
-		                }
-		                //从servlet接收的数据
-		                ,
-		                success: function (msg) {
-			                if (msg === 1) {
-			                	alert("支付成功！");
-				                parent.location.reload();
-			                } else {
-				                alert("支付失败！");
-			                }
-		                },
-		                error: function () {
-			                alert("服务器正忙.....");
-		                }
-	                });
-                }else {
-	                alert("库存不足，请修改数量");
-                }
-            }else {
-                alert("余额不足，请充值");
-            }
+			if (changecount >= parseInt(num)) {
+				$.ajax({
+					type: "post"
+					,
+					url: '/goods/buyGoods'
+					//预期服务器返回的数据类型;
+					,
+					datatype: "text"
+					//从该js会发出到服务器的数据
+					,
+					data: {
+						"total": total,
+						"price": price,
+						"num": num,
+						"oname": oname,
+						"sid": sid
+					}
+					//从servlet接收的数据
+					,
+					success: function (msg) {
+						if (msg === 1) {
+							alert("支付成功！等待管理员确认订单");
+							parent.location.reload();
+						} else if (msg === 0) {
+							alert("余额不足！请充值！");
+						} else {
+							alert("支付失败！请重试！");
+						}
+					},
+					error: function () {
+						alert("服务器正忙.....");
+					}
+				});
+			} else {
+				alert("库存不足，请修改数量");
+			}
 			return false;//false：阻止表单跳转  true：表单跳转
 		});
 

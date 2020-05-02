@@ -63,11 +63,12 @@
 </div>
 
 <script type="text/javascript" th:inline="none">
-
+	var sid;
 
 	function selectinfo(data) {
 		$("#sname").val(data.sname);
 		$("#smoney").val(data.smoney);
+		sid = data.sid;
 	}
 
 	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
@@ -137,29 +138,28 @@
 		//绑定的按钮是submit 监听提交 lay-filter="search"
 		form.on('submit(demo2)', function (data) {
 			var formData = data.field;
-			var sname = formData.sname;
-			var smoney = formData.smoney;
-			var scount = formData.scount;
-			var sstarttime = formData.sstarttime;
-			var sendtime = formData.sendtime;
+			var price = formData.smoney;
+			var num = formData.buynum;
+			var total = parseInt(price) * parseInt(num);
+			var oname = $("#sname").val();
 
 			console.log(formData);
 
 			$.ajax({
 				type: "post"
 				,
-				url: '/goods/insertGoods'
+				url: '/goods/addCar'
 				//预期服务器返回的数据类型;
 				,
 				datatype: "text"
 				//从该js会发出到服务器的数据
 				,
 				data: {
-					"sname": sname,
-					"smoney": smoney,
-					"scount": scount,
-					"sstarttime": sstarttime,
-					"sendtime": sendtime
+					"total": total,
+					"price": price,
+					"num": num,
+					"oname": oname,
+					"sid": sid
 				}
 				//从servlet接收的数据
 				,

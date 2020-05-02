@@ -35,7 +35,7 @@ public class MoneyServiceImpl implements MoneyService
 	 * @return java.lang.String
 	 **/
 	@Override
-	public String getList(String uaccount, String ttype, Integer page, Integer limit)
+	public String getList(String uaccount, String ttype, Integer page, Integer limit,HttpServletRequest request)
 	{
 		//设置起始和限制条数
 		int statrdNum = ((page - 1) * limit);
@@ -45,11 +45,16 @@ public class MoneyServiceImpl implements MoneyService
 		TableModel tableModel = new TableModel();
 		tableModel.setCount(moneyMapper.queryMoneyWithParamTotalNum(uaccount,ttype));
 		tableModel.setData(moneyMapper.queryMoneyWithParam(uaccount,ttype,statrdNum,limit));
+
+		//刷新session域
+		Userinfo user = userMapper.getUser(uaccount);
+		request.getSession().setAttribute("user",user);
+
 		return new Gson().toJson(tableModel);
 	}
 
 	@Override
-	public int chargeMoney(String tmoney, String ttype,HttpServletRequest request)
+	public int chargeMoney(String tmoney, String ttype, HttpServletRequest request)
 	{
 		//获取当前时间
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");

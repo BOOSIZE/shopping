@@ -137,32 +137,55 @@ public class GoodsServiceImpl implements GoodsService
 		//获取当前用户数据
 		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
 		String uaccount = user.getUaccount();
-		String umoney = Integer.valueOf(user.getUmoney())-Integer.valueOf(total)+"";
+		int userMoney = Integer.valueOf(user.getUmoney());
+		String umoney = userMoney -Integer.valueOf(total)+"";
 
-		//插入订单
-		Orderinfo orderinfo = new Orderinfo();
-		orderinfo.setSid(Long.valueOf(sid));
-		orderinfo.setOname(oname);
-		orderinfo.setOcount(num);
-		orderinfo.setOmoney(total);
-		orderinfo.setOtime(ttime);
-		orderinfo.setUaccount(uaccount);
-		int i = orderMapper.addOrder(orderinfo);
+		//判断余额是否充足
+		if(userMoney>=Integer.valueOf(total)){
 
-		//更新用户余额,更新session域
-		int j = userMapper.updateMoney(uaccount, umoney);
-		Userinfo user1 = userMapper.getUser(uaccount);
-		request.getSession().setAttribute("user",user1);
+			//插入订单
+			Orderinfo orderinfo = new Orderinfo();
+			orderinfo.setSid(Long.valueOf(sid));
+			orderinfo.setOname(oname);
+			orderinfo.setOcount(num);
+			orderinfo.setOmoney(total);
+			orderinfo.setOtime(ttime);
+			orderinfo.setUaccount(uaccount);
+			int i = orderMapper.addOrder(orderinfo);
 
-		//添加交易记录
-		moneyMapper.chargeMoney(uaccount,total,ttime,"购买商品");
+			//更新用户余额,更新session域
+			int j = userMapper.updateMoney(uaccount, umoney);
+			Userinfo user1 = userMapper.getUser(uaccount);
+			request.getSession().setAttribute("user",user1);
 
-		//更新该产品销量
-		Shopinfo shopinfo = goodsMapper.querySingleGoods(sid);
-		String ssole = Integer.valueOf(shopinfo.getSsole())+Integer.valueOf(num)+"";
-		String scount = Integer.valueOf(shopinfo.getScount())-Integer.valueOf(num)+"";
-		int k = goodsMapper.updateSole(sid, ssole,scount);
+			//添加交易记录
+			moneyMapper.chargeMoney(uaccount,total,ttime,"购买商品");
 
-		return 1;
+			//更新该产品销量
+			Shopinfo shopinfo = goodsMapper.querySingleGoods(sid);
+			String ssole = Integer.valueOf(shopinfo.getSsole())+Integer.valueOf(num)+"";
+			String scount = Integer.valueOf(shopinfo.getScount())-Integer.valueOf(num)+"";
+			int k = goodsMapper.updateSole(sid, scount);
+			return 1;
+
+		}else {
+			return 0;
+		}
+	}
+
+	@Override
+	public int addCar(String sid, String oname, String total, String num, HttpServletRequest request)
+	{
+		//获取当前时间
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+		String ttime = sdf.format(new Date());
+
+		//获取当前用户数据
+		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
+		String uaccount = user.getUaccount();
+
+
+
+		return 0;
 	}
 }

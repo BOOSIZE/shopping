@@ -15,7 +15,7 @@ public interface MoneyService
 	 * @Param [uaccount, ttype, page, limit]
 	 * @return java.lang.String
 	 **/
-	String getList(String uaccount,String ttype,Integer page,Integer limit);
+	String getList(String uaccount,String ttype,Integer page,Integer limit,HttpServletRequest request);
 
 
 	/**

@@ -53,5 +53,11 @@ public interface GoodsService
 	 * @return int
 	 **/
 	int buyGoods(String sid, String oname, String total,String num, HttpServletRequest request);
-
+	
+	/**
+	 * @Description: 加入购物车
+	 * @Param [sid, oname, total, num]
+	 * @return int
+	 **/
+	int addCar(String sid, String oname, String total,String num, HttpServletRequest request);
 }

@@ -36,7 +36,7 @@ public class MoneyController
 	{
 		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
 		String uaccount = user.getUaccount();
-		return moneyServiceImpl.getList(uaccount,ttype,page,limit);
+		return moneyServiceImpl.getList(uaccount,ttype,page,limit,request);
 	}
 
 	/**
