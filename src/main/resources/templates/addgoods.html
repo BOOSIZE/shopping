@@ -17,7 +17,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">商品名</label>
             <div class="layui-input-inline">
-                <input type="text" id="sname" name="sname" lay-verify="required" autocomplete="off" class="layui-input"
+                <input type="text" id="sname" name="sname" lay-verify="sname" autocomplete="off" class="layui-input"
                        placeholder="请输入商品名称">
             </div>
         </div>
@@ -57,6 +57,7 @@
 </div>
 
 <script>
+	var reg = new RegExp("^(1|([1-9]\\d{0,1})|100)$");
 
 	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
 		var form = layui.form,
@@ -68,7 +69,7 @@
 		var date = new Date();
 		var y = date.getFullYear();
 		var m = date.getMonth() + 1;
-		var d = date.getDate();
+		var d = date.getDate() + 1;
 		var now = "" + y + "-" + m + "-" + d;
 
 		//进货时间
@@ -87,20 +88,30 @@
 
 		//自定义验证规则
 		form.verify({
-			smoney: function (value)
-            {
-				//判断是否为整数
-				if (value % 1 === 0)
-				{
-					//判断范围是否在1-100之间
-					if (value > 100 || value < 1)
-					{
-						return '请输入1-100的整数';
-					}
-				} else
-					{
-					return '请输入1-100的整数';
+			sname: function (value) {
+				if (value.length > 10 || value.length < 2) {
+					return '商品名请控制在2-10个字！';
 				}
+			},
+			smoney: function (value) {
+				console.log(value);
+
+				if(!reg.test(value)) { return "请输入1-100的整数"};
+
+				// 	//判断是否为整数
+				// if (value % 1 === 0) {
+				// 	//判断范围是否在1-100之间
+				// 	if (value > 100 || value < 1) {
+				// 		return '请输入1-100的整数';
+				// 	} else {
+				// 		//判断是否有出现.的符号
+				// 		if (value.indexOf('.') !== -1) {
+				// 			return '请不要输入非法字符！';
+				// 		}
+				// 	}
+				// } else {
+				// 	return '请输入1-100的整数';
+				// }
 			},
 			scount: function (value) {
 				if (value % 1 === 0) {

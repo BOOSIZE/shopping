@@ -36,8 +36,7 @@
             <label class="layui-form-label">购买数量</label>
             <div class="layui-input-inline">
                 <select name="buynum" id="buynum" lay-filter="buynum" >
-                    <option value="" selected=""></option>
-                    <option value="1">1</option>
+                    <option value="1" selected="">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
@@ -69,6 +68,7 @@
 		$("#sname").val(data.sname);
 		$("#smoney").val(data.smoney);
 		sid = data.sid;
+		$("#total").text(data.smoney);
 	}
 
 	layui.use(['form', 'layer', 'laydate', 'jquery'], function () {
