@@ -24,4 +24,12 @@ public interface MoneyService
 	 * @return
 	 */
 	int chargeMoney(String tmoney,String ttype, HttpServletRequest request);
+
+	/**
+	 * @Description: 查询金额
+	 * @Param [request]
+	 * @return int
+	 **/
+	int returnMoney(HttpServletRequest request);
+
 }

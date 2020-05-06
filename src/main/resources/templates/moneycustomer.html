@@ -45,6 +45,23 @@
 
 <script type="text/javascript" th:inline="none">
 
+    window.onload = function (ev) {
+	    $.ajax({
+		    type: "post"
+		    , url: '/money/returnMoney'
+		    //预期服务器返回的数据类型;
+		    , datatype: "text"
+		    //从servlet接收的数据
+		    , success: function (msg) {
+		    	console.log(msg);
+                $("#total").text(msg);
+		    }
+		    , error: function () {
+			    alert("服务器正忙.....");
+		    }
+	    });
+    };
+
 	layui.use(['table', 'jquery'], function () {
 		var table = layui.table;
 		var $ = layui.jquery;

@@ -94,32 +94,37 @@
 				}
 			},
 			smoney: function (value) {
-				console.log(value);
 
-				if(!reg.test(value)) { return "请输入1-100的整数"};
-
-				// 	//判断是否为整数
-				// if (value % 1 === 0) {
-				// 	//判断范围是否在1-100之间
-				// 	if (value > 100 || value < 1) {
-				// 		return '请输入1-100的整数';
-				// 	} else {
-				// 		//判断是否有出现.的符号
-				// 		if (value.indexOf('.') !== -1) {
-				// 			return '请不要输入非法字符！';
-				// 		}
-				// 	}
-				// } else {
-				// 	return '请输入1-100的整数';
-				// }
-			},
-			scount: function (value) {
+					//判断是否为整数
 				if (value % 1 === 0) {
-					if (value < 1) {
-						return '请输入大于1的整数';
+					//判断范围是否在1-100之间
+					if (value > 100 || value < 1) {
+						return '请输入1-100的整数';
+					} else {
+						//判断是否有出现.的符号
+						if (value.indexOf('.') !== -1) {
+							return '请不要输入非法字符！';
+						}
 					}
 				} else {
-					return '请输入大于1的整数';
+					return '请输入1-100的整数';
+				}
+			},
+			scount: function (value) {
+
+				//判断是否为整数
+				if (value % 1 === 0) {
+					//判断范围是否在1-100之间
+					if (value > 100 || value < 1) {
+						return '请输入1-100的整数';
+					} else {
+						//判断是否有出现.的符号
+						if (value.indexOf('.') !== -1) {
+							return '请不要输入非法字符！';
+						}
+					}
+				} else {
+					return '请输入1-100的整数';
 				}
 			}
 		});

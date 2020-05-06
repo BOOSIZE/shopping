@@ -46,9 +46,9 @@ public class MoneyServiceImpl implements MoneyService
 		tableModel.setCount(moneyMapper.queryMoneyWithParamTotalNum(uaccount,ttype));
 		tableModel.setData(moneyMapper.queryMoneyWithParam(uaccount,ttype,statrdNum,limit));
 
-		//刷新session域
-		Userinfo user = userMapper.getUser(uaccount);
-		request.getSession().setAttribute("user",user);
+//		//刷新session域
+//		Userinfo user = userMapper.getUser(uaccount);
+//		request.getSession().setAttribute("user",user);
 
 		return new Gson().toJson(tableModel);
 	}
@@ -67,9 +67,24 @@ public class MoneyServiceImpl implements MoneyService
 		//当前用户充值完之后的余额，并更新session
 		String umoney = Integer.valueOf(user.getUmoney())+Integer.valueOf(tmoney)+"";
 		userMapper.updateMoney(uaccount, umoney);
-		Userinfo user1 = userMapper.getUser(uaccount);
-		request.getSession().setAttribute("user",user1);
+//		Userinfo user1 = userMapper.getUser(uaccount);
+//		request.getSession().setAttribute("user",user1);
 
 		return moneyMapper.chargeMoney(uaccount,tmoney,ttime,ttype);
+	}
+
+	/**
+	 * @Description: 查询余额
+	 * @Param [request]
+	 * @return int
+	 **/
+	@Override
+	public int returnMoney(HttpServletRequest request)
+	{
+		//获取当前用户
+		Userinfo user = (Userinfo) request.getSession().getAttribute("user");
+		String uaccount = user.getUaccount();
+		int umoney = Integer.valueOf(userMapper.getUser(uaccount).getUmoney());
+		return umoney;
 	}
 }

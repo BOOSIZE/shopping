@@ -51,4 +51,14 @@ public class MoneyController
 		//返回充值消息
 		return moneyServiceImpl.chargeMoney(tmoney,ttype,request);
 	}
+
+
+	@RequestMapping("returnMoney")
+	@ResponseBody
+	public int returnMoney(HttpServletRequest request){
+
+		//返回账号余额
+		return moneyServiceImpl.returnMoney(request);
+	}
+
 }
